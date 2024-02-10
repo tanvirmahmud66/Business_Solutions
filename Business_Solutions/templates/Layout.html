@@ -1,0 +1,133 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {%block title%}{%endblock title%}
+    </title>
+
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <link rel="stylesheet" href="{% static 'css/layout.css'%}">
+    {%block link%}{%endblock link%}
+
+</head>
+
+
+<body>
+
+    <div class="mother-div">
+        <div class="sidebar">
+            <div class="upper">
+                <div class="branding">
+                    <a href="#">
+                        <span class="gedget">Amar</span> Shop
+                    </a>
+                </div>
+                </a>
+                <ul class="navList">
+                    <li class="navItem">
+                        <a href="{%url 'dashboard'%}">
+                            <img src="{%static 'icons/nav/home.png'%}" width="25" alt="Dashboard"/>
+                            <div class="navtitle">Dashboard</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'inventory'%}" >
+                            <img src="{%static 'icons/nav/inventory.png'%}" width="25" alt="Inventory"/>    
+                            <div class="navtitle">Inventory</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'reports'%}">
+                            <img src="{%static 'icons/nav/reports.png'%}" width="25" alt="Reports"/>
+                            <div class="navtitle">Reports</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'suppliers'%}">
+                            <img src="{%static 'icons/nav/suppliers.png'%}" width="25" alt="Suppliers"/>
+                            <div class="navtitle">Suppliers</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'orders'%}">
+                            <img src="{%static 'icons/nav/orders.png'%}" width="25" alt="Orders"/>    
+                            <div class="navtitle">Orders</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'manage'%}">
+                            <img src="{%static 'icons/nav/manage.png'%}" width="25" alt="Manage_Store"/>        
+                            <div class="navtitle">Manage Store</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="lower">
+                <ul class="navList">
+                    <li class="navItem">
+                        <a href="#">
+                            <img src="{%static 'icons/nav/settings.png'%}" width="23" alt="Settings"/>
+                            <div class="navtitle">Settings</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="#">
+                            <img src="{%static 'icons/nav/logout.png'%}" width="25" alt="Logout"/>    
+                            <div class="navtitle">Log Out</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <nav class="navbar navbar-light bg-white navbar-w">
+                <div class="container-fluid">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-warning" type="submit">Search</button>
+                    </form>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu right-100 translate-middle-x" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="#">
+                                <img src="{% static 'icons/nav/profile.png'%}" width="23" alt="Profile"/>
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <img src="{% static 'icons/nav/settings.png'%}" width="23" alt="Settings"/>
+                                Settings
+                            </a>
+                            <li><hr class="dropdown-divider"></li>
+                            <a class="dropdown-item" href="#">
+                                <img src="{% static 'icons/nav/logout.png'%}" width="25" alt="Logout"/>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <section>
+                {%block main%}
+
+                {%endblock main%}
+            </section>
+
+            <script type="text/javascript" src="{%static 'js/layout.js'%}"></script>
+        </div>
+    </div>
+
+    
+    
+</body>
+</html>
