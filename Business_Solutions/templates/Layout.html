@@ -7,15 +7,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        {%block title%}{%endblock title%}
+        {%block title%}Home | Amar Shop{%endblock title%}
     </title>
 
     {% load bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
-    <link rel="stylesheet" href="{% static 'css/layout.css'%}">
     {%block link%}{%endblock link%}
+    
+    <link rel="stylesheet" href="{% static 'css/layout.css'%}">
+    
 
 </head>
 
@@ -26,7 +27,7 @@
         <div class="sidebar">
             <div class="upper">
                 <div class="branding">
-                    <a href="#">
+                    <a href="{%url 'dashboard'%}">
                         <span class="gedget">Amar</span> Shop
                     </a>
                 </div>
@@ -117,11 +118,11 @@
                 </div>
             </nav>
 
-            <section>
+            <div class="main-content">
                 {%block main%}
 
                 {%endblock main%}
-            </section>
+            </div>
 
             <script type="text/javascript" src="{%static 'js/layout.js'%}"></script>
         </div>

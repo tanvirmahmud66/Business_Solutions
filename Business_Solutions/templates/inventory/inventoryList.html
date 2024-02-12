@@ -1,0 +1,23 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+<!-- titile -->
+
+{%block title%} All Inventory | Amar Shop {%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory p-2">
+
+    <ul>
+        {%for inventory in inventories%}
+        <li>{{inventory}}</li>
+        {%endfor%}
+    </ul>
+
+</div>
+{%endblock main%}
