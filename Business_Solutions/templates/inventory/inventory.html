@@ -12,92 +12,52 @@
 
 <!-- main body -->
 {%block main%}
-<div class="inventory p-2">
+<div class="inventory">
     
-    <div class="container height-100">
-        <div class="row height-50">
-            <div class="col-8 p-1">
-                <div class="card height-100">
-                    <div class="card-body">
-                        <div class="card-title d-flex justify-content-between align-items-center">
-                            <div class="fs-4">Inventory</div>
-                            <a href="{%url 'create-inventory'%}" class="btn btn-outline-success btn-sm">Add Inventory</a>
-                        </div>
-                        <div class="card-text">
-                            <ul class="list-group">
-                                {%for each in data.inventories%}
-                                    <li class="list-group-item list-group-item-action">{{each}}</li>
-                                {%endfor%}
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="{%url 'inventory-list'%}" class="card-footer text-center">See all</a>
+    <div class="container card height-100 p-3">
+        <div class="row height-45">
+            <a href="{%url 'inventory-list' %}" class="col effect m-1  d-flex justify-content-center align-items-center">
+                <div class="rounded-circle alert alert-info text-center p-4 d-flex flex-column justify-content-center align-items-center" style="width: 250px; height: 250px;">
+                    <!-- <img src="{%static 'icons/inventory/inventory.png'%}" width="125" alt="inventory"/> -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/heexevev.json"
+                        trigger="hover"
+                        style="width:150px;height:150px"
+                    >
+                    </lord-icon>
+                    <div class="fs-bold fs-5">Inventory</div>
                 </div>
-            </div>
-            <div class="col p-1">
-                <div class="card height-100">
-                    <div class="card-body">
-                        <div class="card-title d-flex justify-content-between align-items-center">
-                            <div class="fs-4">Categories</div>
-                            <a href="{%url 'create-category'%}" class="btn btn-outline-success btn-sm">Add Category</a>
-                        </div>
-                        <div class="card-text">
-                            <ul class="list-group">
-                                {%for each in data.categories%}
-                                    {%for dict in counts%}
-                                        {% for key, value in dict.items %}
-                                            {%if each.category == key %}
-                                                <li class="list-group-item list-group-item-action">{{each}} - {{value}}</li>
-                                            {%endif%}
-                                        {% endfor %}
-                                    {%endfor%}
-                                {%endfor%}
-
-                                
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="{%url 'all-category'%}" class="card-footer text-center">See all</a>
+            </a>
+            <a href="{%url 'product-list' %}" class="col m-1 effect d-flex justify-content-center align-items-center">
+                <div class="rounded-circle alert alert-info text-center p-4 d-flex flex-column justify-content-center align-items-center" style="width: 250px; height: 250px;">
+                    <!-- <img src="{%static 'icons/inventory/product.png'%}" width="125" alt="product"/> -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/pgmktfgp.json"
+                        trigger="hover"
+                        style="width:150px;height:150px">
+                    </lord-icon>
+                    <div class="fs-bold fs-5">Product</div>
                 </div>
-            </div>
+            </a>
         </div>
-        <div class="row height-50">
-            <div class="col-8 p-1">
-                <div class="card height-100">
-                    <div class="card-body pt-2 pb-2">
-                        <div class="card-title d-flex justify-content-between align-items-center">
-                            <div class="fs-4">Products</div>
-                            <a href="{%url 'create-product'%}" type="button" class="btn btn-outline-success btn-sm">Add Product</a>
-                        </div>
-                        <div class="card-text">
-                            <ul class="list-group">
-                                {%for each in data.products%}
-                                    <li class="list-group-item list-group-item-action">{{each}}</li>
-                                {%endfor%}
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="{%url 'product-list'%}" class="card-footer text-center">See all</a>
+        <div class="row height-45 mt-2">
+            <a href="{%url 'category-list' %}" class="col m-1 effect d-flex justify-content-center align-items-center">
+                <div class="rounded-circle alert alert-info text-center p-4 d-flex flex-column justify-content-center align-items-center" style="width: 250px; height: 250px;">
+                    <!-- <img src="{%static 'icons/inventory/category.png'%}" width="125" alt="categroy"/> -->
+                    <lord-icon
+                        src="https://cdn.lordicon.com/hmqggwrl.json"
+                        trigger="hover"
+                        style="width:150px;height:150px">
+                    </lord-icon>
+                    <div class="fs-bold fs-5">Category</div>
                 </div>
-            </div>
-            <div class="col p-1">
-                <div class="card height-100">
-                    <div class="card-body pt-2 pb-2">
-                        <div class="card-title d-flex justify-content-between align-items-center">
-                            <div class="fs-4">Brands</div>
-                            <a href="{%url 'create-brand'%}" class="btn btn-outline-success btn-sm">Add Brand</a>
-                        </div>
-                        <div class="card-text">
-                            <ul class="list-group">
-                                {%for each in data.brands%}
-                                    <li class="list-group-item list-group-item-action">{{each}}</li>
-                                {%endfor%}
-                            </ul>
-                        </div>
-                    </div>
-                    <a href="{%url 'all-brand'%}" class="card-footer text-center">See all</a>
+            </a>
+            <a href="{%url 'brand-list' %}" class="col m-1 effect d-flex justify-content-center align-items-center">
+                <div class="rounded-circle alert alert-info text-center p-4 d-flex flex-column justify-content-center align-items-center" style="width: 250px; height: 250px;">
+                    <img src="{%static 'icons/inventory/brand.png'%}" width="125" alt="brand"/>
+                    <div class="fs-bold fs-5">Brand</div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 

@@ -1,10 +1,12 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
+import os
 
 # Create your models here.
 
 # ------------------------------------------------ Device Categories Model
-class DeviceCategories(models.Model):
-    category = models.CharField(max_length=255)
+class Categories(models.Model):
+    category = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ['id']
@@ -14,11 +16,9 @@ class DeviceCategories(models.Model):
     
 
 
-
-
 # ------------------------------------------------ Brand Model 
 class Brand(models.Model):
-    brand = models.CharField(max_length=255)
+    brand = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ['id']
@@ -27,66 +27,90 @@ class Brand(models.Model):
         return self.brand
     
 
+#------------------------------------------------- supplier model
+class Supplier(models.Model):
+    company_name = models.CharField(max_length=255)
+    contact_person = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=20)
+    address = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return self.company_name
 
 
 # ------------------------------------------------ Devices Model
-class Device(models.Model):
-    STORAGE_TYPE_CHOICES = [
-        ('SSD', 'SSD'),
-        ('HDD', 'HDD')
-    ]
-    BOOL_TYPE_CHOICES = [
-        ('YES', 'YES'),
-        ('NO','NO')
-    ]
-    category = models.ForeignKey(DeviceCategories, on_delete=models.CASCADE)
+def product_image_path(instance, filename):
+    return os.path.join('Product_Image', f'{instance.model}', filename)
+
+class Product(models.Model):
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     model = models.CharField(max_length=255)
-    price = models.PositiveIntegerField()
-    screen_size = models.CharField(max_length=10, null=True, blank=True)
-    storage_capacity = models.CharField(max_length=255,null=True, blank=True)
-    storage_type = models.CharField(max_length=255,null=True, blank=True, choices=STORAGE_TYPE_CHOICES)
-    ram = models.CharField(max_length=255,null=True, blank=True)
-    os = models.CharField(max_length=255, null=True, blank=True)
-    battery = models.CharField(max_length=255,null=True, blank=True)
-    processor = models.CharField(max_length=255, null=True, blank=True)
-    camera = models.TextField(null=True, blank=True)
-    bluetooth = models.CharField(max_length=255,null=True, blank=True)
-    wifi = models.CharField(max_length=255, null=True, blank=True)
-    noise_cancelling = models.CharField(null=True, blank=True, choices=BOOL_TYPE_CHOICES)
-    microphone = models.CharField(null=True, blank=True, choices=BOOL_TYPE_CHOICES)
-    megapixel = models.CharField(max_length=255,null=True, blank=True)
-    sensor = models.CharField(max_length=255,null=True, blank=True)
-    lens = models.CharField(max_length=255,null=True, blank=True)    
-    zoom = models.CharField(max_length=255,null=True, blank=True)
-    video_resulation = models.CharField(max_length=255,null=True, blank=True)
-    gpu = models.CharField(max_length=255,null=True, blank=True)
-    cpu = models.CharField(max_length=255,null=True, blank=True)
-    ports = models.CharField(max_length=255,null=True, blank=True)
-    water_resistance = models.CharField(null=True, blank=True, choices=BOOL_TYPE_CHOICES)
-    graphics_card = models.CharField(max_length=255,null=True, blank=True)
-    resolution = models.CharField(max_length=255,null=True, blank=True)
-    refresh_rate = models.CharField(max_length=255,null=True, blank=True)
+    price = models.PositiveBigIntegerField()
+    cost = models.PositiveBigIntegerField()
+    description = models.TextField()
+    productImg = models.ImageField(upload_to=product_image_path, null=True, blank=True)
+    released_year = models.DateField(null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return self.model
     
 
 
-
-
 # -------------------------------------------------- Inventory Model
 class Inventory(models.Model):
-    product = models.ForeignKey(Device, on_delete=models.CASCADE)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, unique=True)
     quantity = models.PositiveIntegerField()
+    supplierId = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
 
     def __str__(self):
         return self.product.model
 
 
 
+class Transaction(models.Model):
+    TRANSACTION_TYPE = [
+        ('IN', 'IN'),
+        ('OUT','OUT')
+    ]
+    PAYMENT_METHOD = [
+        ('Cash', 'Cash'),
+        ('Credit Card', 'Credit card'),
+        ('Master Card', 'Master Card'),
+        ('Bank Cheque','Bank cheque'),
+        ('Bkash','Bkash'),
+        ('Sure Cash','Sure Cash'),
+        ('DBBL Mobile','DBBL Mobile'),
+        ('DBBL Card','DBBL Card'),
+        ('Nagad','Nagad'),
+        ('UCash', 'UCash'),
+        ('Payoneer','Payoneer'),
+    ]
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    transaction_type = models.CharField(max_length=5,choices=TRANSACTION_TYPE)
+    payment_method = models.CharField(max_length=50,choices=PAYMENT_METHOD)
+    quantity = models.PositiveIntegerField()
+    amount = models.PositiveBigIntegerField()
+    transaction_code = models.CharField(max_length=255,unique=True)
+    transaction_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['transaction_date']
+
+
+    def __str__(self):
+        return self.transaction_code

@@ -1,10 +1,10 @@
 from django import forms
-from .models import DeviceCategories, Brand, Inventory, Device
+from .models import Categories, Brand, Inventory, Product, Supplier, Transaction
 
 # ------------------------ Category Form
 class CategoryForm(forms.ModelForm):
     class Meta:
-        model = DeviceCategories
+        model = Categories
         fields = '__all__'
 
 
@@ -22,5 +22,17 @@ class InventoryForm(forms.ModelForm):
 
 class Productform(forms.ModelForm):
     class Meta:
-        model = Device
+        model = Product
+        fields = '__all__'
+
+
+class SupplierForm(forms.ModelForm):
+    class Meta:
+        model = Supplier
+        fields = '__all__'
+
+
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
         fields = '__all__'

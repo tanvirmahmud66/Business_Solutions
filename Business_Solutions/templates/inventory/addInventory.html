@@ -13,12 +13,46 @@
 {%block main%}
 <div class="inventory p-2">
 
-    <form method="post" enctype="multipart/form-data">
-        {%csrf_token%}
-        {{form.as_p}}
-        <button class="btn btn-outline-success" type="submit">Create</button>
-    </form>
-
+    <div class="card d-flex justify-content-center align-items-center height-100">
+        <div class="card custom-card">
+            <div class="card-header fs-4 text-center">New Inventory</div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.product.id_for_label }}" class="form-label">Product:</label>
+                        {{ form.product }}
+                        <div class="text-danger mt-1">
+                            {{ form.product.errors }}
+                        </div>
+                    </div>
+                
+                    <div class="mb-3">
+                        <label for="{{ form.quantity.id_for_label }}" class="form-label">Quantity:</label>
+                        {{ form.quantity }}
+                        <div class="text-danger mt-1">
+                            {{ form.quantity.errors }}
+                        </div>
+                    </div>
+                
+                    <div class="mb-3">
+                        <label for="{{ form.supplierId.id_for_label }}" class="form-label">Supplier:</label>
+                        {{ form.supplierId }}
+                        <div class="text-danger mt-1">
+                            {{ form.supplierId.errors }}
+                        </div>
+                    </div>
+                
+                    <div class="mt-3">
+                        <a href="{% url 'inventory-list' %}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-outline-success ms-2">Add</button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
 
 </div>
 {%endblock main%}
