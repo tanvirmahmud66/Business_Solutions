@@ -24,6 +24,10 @@ class Productform(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 5}), 
+            'released_year': forms.SelectDateWidget(years=range(2018, 2030))
+        }
 
 
 class SupplierForm(forms.ModelForm):

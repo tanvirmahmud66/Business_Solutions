@@ -134,22 +134,52 @@ class ProductListView(ListView):
     model = Product
     context_object_name = 'products'
     template_name = 'inventory/productList.html'
+    categories_model = Categories.objects.all()
+    brand_model = Brand.objects.all()
+    extra_context = {
+        'categories': categories_model,
+        'brands': brand_model
+    }
 
-    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', None)
+        cate = self.request.GET.get('category', None)
+        brand = self.request.GET.get('brand',None)
+        price = self.request.GET.get('price',None)
+        if search_query:
+            queryset = queryset.filter(model__icontains=search_query)
 
-class CategoryListView(ListView):
-    model = Categories
-    context_object_name = 'categories'
-    template_name = 'inventory/allcategory.html'
-    
+        if cate:
+            queryset = queryset.filter(category__id=cate)
+        if brand:
+            queryset = queryset.filter(brand__id=brand)
+        if price:
+            queryset = queryset.filter(price__gte=price)
 
-
-class BrandListView(ListView):
-    model = Brand
-    context_object_name = 'brands'
-    template_name = 'inventory/brandList.html'
-
-
+        if brand and cate and price==None:
+            queryset = queryset.filter(
+                 Q(brand__id=brand) &
+                 Q(category__id=cate)
+            )
+        elif price and cate and brand==None:
+            queryset = queryset.filter(
+                 Q(price__gte=price) &
+                 Q(category__id=cate)
+            )
+        elif price and brand and cate==None:
+            queryset = queryset.filter(
+                 Q(price__gte=price) &
+                 Q(brand__id=brand)
+            )
+        elif price and brand and cate:
+            queryset = queryset.filter(
+                 Q(price__gte=price) &
+                 Q(brand__id=brand) &
+                 Q(category__id=cate)
+            )
+            
+        return queryset
 
 
 
@@ -160,6 +190,30 @@ class CreateProductView(CreateView):
 
     def get_success_url(self):
         return reverse('product-list')
+    
+
+class ProductDetailsView(DetailView):
+    model = Product
+    context_object_name = 'product'
+    template_name = 'inventory/productDetails.html'
+
+
+class ProductUpdateView(UpdateView):
+    model = Product
+    form_class = Productform
+    context_object_name = 'product'
+    template_name = 'inventory/productUpdate.html'
+
+    def get_success_url(self):
+        return reverse('product-details',kwargs={'pk': self.object.pk})
+
+
+class ProductDeleteView(DeleteView):
+    model = Product
+    context_object_name = 'product'
+    template_name = 'inventory/productDelete.html'
+    success_url = reverse_lazy('product-list')
+
 
 
 class CreateCategoryView(CreateView):
@@ -168,7 +222,36 @@ class CreateCategoryView(CreateView):
     template_name = 'inventory/addCategory.html'
 
     def get_success_url(self):
-        return reverse('all-category')
+        return reverse('category-list')
+
+
+class CategoryListView(ListView):
+    model = Categories
+    context_object_name = 'categories'
+    template_name = 'inventory/allcategory.html'
+
+
+class CategoryUpdateView(UpdateView):
+    model = Categories
+    form_class = CategoryForm
+    context_object_name = 'category'
+    template_name = 'inventory/categoryUpdate.html'
+    success_url = reverse_lazy('category-list')
+
+
+class CategoryDeleteView(DeleteView):
+    model = Categories
+    context_object_name = 'category'
+    template_name = 'inventory/categoryDelete.html'
+    success_url = reverse_lazy('category-list')
+
+    
+
+
+class BrandListView(ListView):
+    model = Brand
+    context_object_name = 'brands'
+    template_name = 'inventory/brandList.html'
 
 
 class CreateBrandView(CreateView):
@@ -177,7 +260,22 @@ class CreateBrandView(CreateView):
     template_name = 'inventory/addbrand.html'
 
     def get_success_url(self):
-        return reverse('all-brand')
+        return reverse('brand-list')
+    
+
+class BrandUpdateView(UpdateView):
+    model = Brand
+    form_class = BrandForm
+    context_object_name = 'brand'
+    template_name = 'inventory/brandUpdate.html'
+    success_url = reverse_lazy('brand-list')
+
+
+class BrandDeleteView(DeleteView):
+    model = Brand
+    context_object_name = 'brand'
+    template_name = 'inventory/brandDelete.html'
+    success_url = reverse_lazy('brand-list')
 
 
 

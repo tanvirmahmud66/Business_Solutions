@@ -104,10 +104,11 @@ a{
     background: white;
 }
 
-input, select{
+input, select,textarea{
     width: 100%;
     padding: 5px;
 }
+
 
 .btn-back{
     padding: .3rem .5rem;

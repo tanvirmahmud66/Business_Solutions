@@ -3,7 +3,7 @@
 
 <!-- titile -->
 
-{%block title%} Add New Category | Amar Shop {%endblock title%}
+{%block title%} Update Brand Name | Amar Shop {%endblock title%}
 
 {%block link%}
     <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
@@ -16,17 +16,17 @@
     <div class="card height-100">
         <div class="d-flex justify-content-center align-items-center height-100">
             <div class="card custom-card">
-                <div class="card-header fs-4 text-center">Add New Category</div>
+                <div class="card-header fs-4 text-center">Update Brand</div>
                 <div class="card-body">
                     <form method="post" enctype="multipart/form-data">
                         {%csrf_token%}
-                        {{ form.category}}
+                        {{ form.brand}}
                         <div class="mt-1 text-danger">
-                            {{ form.category.errors }}
+                            {{ form.brand.errors }}
                         </div>   
                         <div class="width-100 mt-3 d-flex align-items-center">
-                            <a class="btn btn-outline-secondary" href="{%url 'category-list'%}">Cancel</a>
-                            <button class="btn btn-outline-success ms-2" type="submit">Add</button>
+                            <a class="btn btn-outline-secondary" href="{%url 'brand-list'%}">Cancel</a>
+                            <button class="btn btn-outline-success ms-2" type="submit">Update</button>
                         </div>
                     </form>
                 </div>
