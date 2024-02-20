@@ -70,9 +70,17 @@ class Product(models.Model):
 class Inventory(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, unique=True)
     quantity = models.PositiveIntegerField()
-    supplierId = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
+    total_cost = models.PositiveBigIntegerField(null=True, blank=True)
+    valuation = models.PositiveBigIntegerField(null=True, blank=True)
+    profit = models.PositiveBigIntegerField(null=True, blank=True)
     last_updated = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        self.total_cost = self.quantity * self.product.cost
+        self.valuation = self.quantity * self.product.price
+        self.profit = self.valuation - self.total_cost
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ['created_at']
@@ -101,6 +109,8 @@ class Transaction(models.Model):
         ('Payoneer','Payoneer'),
     ]
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # customer
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE,null=True,blank=True)
     transaction_type = models.CharField(max_length=5,choices=TRANSACTION_TYPE)
     payment_method = models.CharField(max_length=50,choices=PAYMENT_METHOD)
     quantity = models.PositiveIntegerField()
@@ -114,3 +124,38 @@ class Transaction(models.Model):
 
     def __str__(self):
         return self.transaction_code
+
+
+# --------------------------------------------------------------- Purchase Model
+class Purchase(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    supplier = models.ForeignKey(Supplier,on_delete=models.CASCADE)
+    purchase_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['purchase_date']
+
+
+    def __str__(self):
+        return self.product.model
+
+
+# ----------------------------------------------------------------- Sales Model
+class Sale(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    # customer
+    quantity = models.PositiveIntegerField()
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    sale_date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['sale_date']
+    
+    def __str__(self):
+        return self.product
+
+

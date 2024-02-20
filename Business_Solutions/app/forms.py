@@ -1,5 +1,5 @@
 from django import forms
-from .models import Categories, Brand, Inventory, Product, Supplier, Transaction
+from .models import Categories, Brand, Inventory, Product, Supplier, Transaction, Purchase, Sale
 
 # ------------------------ Category Form
 class CategoryForm(forms.ModelForm):
@@ -34,9 +34,25 @@ class SupplierForm(forms.ModelForm):
     class Meta:
         model = Supplier
         fields = '__all__'
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': 5}),
+        }
 
 
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
+        fields = '__all__'
+    
+
+
+class PurchaseForm(forms.ModelForm):
+    class Meta:
+        model = Purchase
+        fields = '__all__'
+
+
+class SaleForm(forms.ModelForm):
+    class Meta:
+        model = Sale
         fields = '__all__'

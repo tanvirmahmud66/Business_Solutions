@@ -1,0 +1,66 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+<!-- titile -->
+{%block title%} Sale Details | Amar Shop{%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory p-2">
+
+    <div class="card height-100 p-5">
+        
+        <div>
+            <a href="{%url 'sales-list'%}" class="btn-back">
+                <img src="{%static 'icons/inventory/back.gif'%}" width="25" alt=""/>
+            </a>
+        </div>
+
+        <div class="row height-100">
+            <div class="mt-4 col">
+                <div class="fs-2 fw-bold">{{sale.product}}</div>
+                <div class="mt-4 row">
+                    <div class="col">Brand: <span class="alert alert-info p-1 m-0">{{sale.product.brand}}</span> </div>
+                    <div class="col">Category: <span class="alert alert-info p-1 m-0">{{sale.product.category}}</span></div>
+                </div>
+                <div class="mt-3 row">
+                    <div class="col">Quantity: {{sale.quantity}} piece</div>
+                </div>
+                <div class="mt-3 text-success row">
+                    <div class="col">Cost(per unit): {{sale.unit_price}} BDT</div>
+                    <div class="col fw-bold">Total ammount: {{sale.total_price}} BDT</div>
+                </div>
+                <div class="mt-3 custom-btn row">
+                    <div class="col">Sale Date: {{sale.sale_date}}</div>
+                </div>
+                <div class="mt-5 row">
+                    <div class="fs-5 fw-bold">Customer details -</div>
+                    <div class="mt-3 col">Name: </div>
+                </div>
+                <div class="mt-4 row">
+                    <div class="col">Email: <span class="alert alert-secondary p-1 m-0"></span></div>
+                    <div class="col">Phone: <span class="alert alert-secondary p-1 m-0"></span></div>
+                </div>
+                <div class="mt-4 row">
+                    <div class="col">Address: </div>
+                </div>
+                <div class="row mt-4">
+                    <a href="{%url 'sales-update' sale.id%}" class="col btn btn-outline-secondary">Update Sale</a>
+                    <a href="{%url 'sales-delete' sale.id%}" class="ms-1 col btn btn-outline-danger">Delete</a>
+                </div>
+            </div>    
+            <div class="mt-4 col">
+                {%if sale.product.productImg %}
+                <img src="{{ sale.product.productImg.url }}" alt="Product Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                {%endif%}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{%endblock main%}

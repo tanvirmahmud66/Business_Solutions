@@ -31,26 +31,30 @@
                     <div class="col">Category: <span class="alert alert-info p-1 m-0">{{inventory.product.category}}</span></div>
                 </div>
                 <div class="mt-5 row">
-                    <div class="col">Price: {{inventory.product.price}} BDT</div>
-                    <div class="col">Cost: {{inventory.product.cost}} BDT</div>
+                    <div class="col">Stock: 
+                        {%if inventory.quantity < 5 and inventory.quantity > 0 %}
+                            <span class="alert alert-warning p-1 m-0">Running out</span>
+                        {%elif inventory.quantity == 0%}
+                            <span class="alert alert-danger p-1 m-0">Out of stock</span>
+                        {%else%}
+                            <span class="alert alert-success p-1 m-0">Available</span>
+                        {%endif%} 
+                    </div>
+                    <div class="col">Quantity: {{inventory.quantity}} piece</div>
                 </div>
                 <div class="mt-5 row">
-                    <div class="col">Quantity: {{inventory.quantity}} piece</div>
-                        <div class="col">Stock: 
-                            {%if inventory.quantity < 5 and inventory.quantity > 0 %}
-                                <span class="alert alert-warning p-1 m-0">Running out</span>
-                            {%elif inventory.quantity == 0%}
-                                <span class="alert alert-danger p-1 m-0">Out of stock</span>
-                            {%else%}
-                                <span class="alert alert-success p-1 m-0">Available</span>
-                            {%endif%} 
-                        </div>
+                    <div class="col text-danger">Cost(per unit): {{inventory.product.cost}} BDT</div>
+                    <div class="col">Price(per unit): {{inventory.product.price}} BDT</div>
+                    
+                </div>
+                <div class="mt-5 row">
+                    <div class="col text-danger">Total Cost: {{inventory.total_cost}} BDT</div>
+                    <div class="col text-success">Quantity Valuation: {{inventory.valuation}} BDT</div>
                 </div>
                 <div class="mt-5 row">
                     <div class="col">Released year: {{inventory.product.released_year}}</div>
-                    <div class="col">Supplier: {{inventory.supplierId.company_name}}</div>
                 </div>
-                <div class="mt-5">Description: {{inventory.product.description}}</div>
+                <div class="mt-3">Description: {{inventory.product.description}}</div>
                 <div class="row mt-4">
                     <a href="{%url 'inventory-update' inventory.id %}" class="col btn btn-outline-secondary">Update inventory</a>
                     <a href="{%url 'product-update' inventory.product.id %}" class="ms-1 col btn btn-outline-secondary">Edit product</a>

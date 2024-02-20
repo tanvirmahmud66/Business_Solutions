@@ -1,28 +1,50 @@
 from django.urls import path
-from .views import DashboardView, InventoryView, CategoryListView,CreateCategoryView,StoreManageView, OrderView, ReportView, SuppliersView
+from .views import DashboardView, InventoryView, CategoryListView,CreateCategoryView,StoreManageView, OrderView, ReportView
 from .views import CreateBrandView, BrandListView, InventoryListView, ProductListView, CreateInventoryView, CreateProductView, InventoryDetailsView, InventoryUpdateView, InventoryDeleteView
 
 from .views import (
     DashboardView,
+
     InventoryView,
     InventoryListView,
     CreateInventoryView,
     InventoryDetailsView,
     InventoryUpdateView,
     InventoryDeleteView,
+
+    SalesListView,
+    SalesCreateView,
+    SalesDetailsView,
+    SalesUpdateView,
+    SalesDeleteView,
+
+    PurchaseCreateView,
+    PurchaseListView,
+    PurchaseDetailsView,
+    PurchaseUpdateView,
+    PurchaseDeleteView,
+
     ProductListView,
     CreateProductView,
     ProductDetailsView,
     ProductUpdateView,
     ProductDeleteView,
+
     CreateCategoryView,
     CategoryListView,
     CategoryUpdateView,
     CategoryDeleteView,
+
     CreateBrandView,
     BrandListView,
     BrandUpdateView,
     BrandDeleteView,
+
+    SuppliersListView,
+    SupplierCreateView,
+    SupplierUpdateView,
+    SupplierDeleteView,
+
 )
 
 urlpatterns = [
@@ -35,6 +57,18 @@ urlpatterns = [
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
     path('inventory/<int:pk>/update/',InventoryUpdateView.as_view(),name='inventory-update'),
     path('inventory/<int:pk>/delete/',InventoryDeleteView.as_view(),name='inventory-delete'),
+
+    path('inventory/purchase/purchase-list/',PurchaseListView.as_view(),name='purchase-list'),
+    path('inventory/purchase/new-purchase/',PurchaseCreateView.as_view(),name='new-purchase'),
+    path('inventory/purchase/<int:pk>/details/',PurchaseDetailsView.as_view(),name='purchase-details'),
+    path('inventory/purchase/<int:pk>/update/',PurchaseUpdateView.as_view(),name='purchase-update'),
+    path('inventory/purchase/<int:pk>/delete/',PurchaseDeleteView.as_view(),name='purchase-delete'),
+
+    path('inventory/sales/sales-list/',SalesListView.as_view(),name='sales-list'),
+    path('inventory/sales/new-sale/',SalesCreateView.as_view(),name='new-sale'),
+    path('inventory/sales/<int:pk>/details/',SalesDetailsView.as_view(),name='sales-details'),
+    path('inventory/sales/<int:pk>/update/',SalesUpdateView.as_view(),name='sales-update'),
+    path('inventory/sales/<int:pk>/delete/',SalesDeleteView.as_view(),name='sales-delete'),
 
     path('inventory/product/product-list/', ProductListView.as_view(), name='product-list'),
     path('inventory/product/create-product/', CreateProductView.as_view(), name='create-product'),
@@ -56,7 +90,10 @@ urlpatterns = [
     path('reports/', ReportView.as_view(), name='reports'),
 
 
-    path('suppliers/', SuppliersView.as_view(), name='suppliers'),
+    path('suppliers/', SuppliersListView.as_view(), name='supplier-list'),
+    path('suppliers/create-supplier/',SupplierCreateView.as_view(), name='create-supplier'),
+    path('suppliers/supplier/<int:pk>/update/',SupplierUpdateView.as_view(), name='supplier-update'),
+    path('suppliers/supplier/<int:pk>/delete/',SupplierDeleteView.as_view(), name='supplier-delete'),
 
 
     path('orders/', OrderView.as_view(), name='orders'),

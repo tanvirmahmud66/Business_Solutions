@@ -63,7 +63,10 @@
                         <th scope="col" class="text-center">Details</th>
                         <th scope="col" class="text-center">Quantity</th>
                         <th scope="col" class="text-center">Price per unit.</th>
-                        <th scope="col" class="text-center">Total Valuation</th>
+                        <th scope="col" class="text-center">Cost per unit.</th>
+                        <th scope="col" class="text-center">Total cost</th>
+                        <th scope="col" class="text-center">Valuation</th>
+                        <th scope="col" class="text-center">Est. Profit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,19 +87,12 @@
                         <td class="text-center"><a href="{%url 'inventory-details' inventory.id%}" class="btn btn-sm btn-outline-secondary">Details</a></td>
                         <td class="text-center"><div class="alert alert-info p-0 m-0 width-auto">{{inventory.quantity}}</div></td>
                         <td class="text-center">{{inventory.product.price}} BDT</td>
-                        <td class="text-center">{{ inventory.total_value }} BDT</td>
+                        <td class="text-center text-danger">{{ inventory.product.cost }} BDT</td>
+                        <td class="text-center text-danger">{{ inventory.total_cost }} BDT</td>
+                        <td class="text-center">{{ inventory.valuation }} BDT</td>
+                        <td class="text-center">{{ inventory.profit }} BDT</td>
                       </tr>
                     {%endfor%}
-                      <tr>
-                        <td class=""></td>
-                        <td class=""></td>
-                        <td class=""></td>
-                        <td class=""></td>
-                        <td class=""></td>
-                        <td class=""></td>
-                        <td class="fw-bold text-center table-active">Net worth</td>
-                        <td class="fw-bold text-center table-active">{{total_value_sum}} tk.</td>
-                      </tr>
                 </tbody>
             </table>
         </div>

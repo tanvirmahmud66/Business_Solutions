@@ -1,0 +1,63 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+<!-- titile -->
+
+{%block title%}Suppliers | Amar Shop{%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/suppliers.css'%}">
+{%endblock link%}
+
+
+<!-- main body -->
+{%block main%}
+<div class="supplier p-2">
+    
+    <div class="card height-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="fs-4 fw-bold">Suppliers</div>
+            <a href="{%url 'create-supplier'%}" class="btn btn-sm btn-success">Add Supplier</a>
+        </div>
+        <div class="card-header d-flex justify-content-end align-items-center">
+            <form method="get" action="{%url 'inventory-list'%}" class="ms-2 d-flex">
+                <input class="form-control" type="text" name="company" placeholder="Company..">
+                <input class="form-control" type="email" name="email" placeholder="Emain">
+                <input class="form-control" type="text" name="person" placeholder="Person..">
+                <input class="form-control" type="text" name="phone" placeholder="Phone..">
+                <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>     
+          </form>
+        </div>
+        <div class="card-body overflow-scroll">
+            <table class="table table-bordered border-warning">
+                <thead class="table-secondary">
+                    <tr>
+                        <th scope="col">Company Name</th>
+                        <th scope="col" class="text-center">Email</th>
+                        <th scope="col" class="text-center">Contact Person</th>
+                        <th scope="col" class="text-center">Phone No.</th>
+                        <th scope="col" class="text-center">Address</th>
+                        <th scope="col" class="text-center">Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for supplier in suppliers%}
+                    <tr>
+                        <td>{{supplier.company_name}}</td>
+                        <td>{{supplier.email}}</td>
+                        <td>{{supplier.contact_person}}</td>
+                        <td>{{supplier.phone_number}}</td>
+                        <td>{{supplier.address}}</td>
+                        <td class="d-flex justify-content-center align-items-center">
+                            <a href="{%url 'supplier-update' supplier.id %}" class="btn btn-sm btn-outline-secondary me-1">Update</a>
+                            <a href="{%url 'supplier-delete' supplier.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{%endblock main%}
