@@ -11,7 +11,7 @@
 
 <!-- main body -->
 {%block main%}
-<div class="inventory p-2">
+<div class="inventory">
 
    <div class="card height-100 p-5">
         <div>
@@ -30,7 +30,7 @@
                     <div class="col">Brand: <span class="alert alert-info p-1 m-0">{{inventory.product.brand}}</span> </div>
                     <div class="col">Category: <span class="alert alert-info p-1 m-0">{{inventory.product.category}}</span></div>
                 </div>
-                <div class="mt-5 row">
+                <div class="mt-4 row">
                     <div class="col">Stock: 
                         {%if inventory.quantity < 5 and inventory.quantity > 0 %}
                             <span class="alert alert-warning p-1 m-0">Running out</span>
@@ -40,25 +40,36 @@
                             <span class="alert alert-success p-1 m-0">Available</span>
                         {%endif%} 
                     </div>
-                    <div class="col">Quantity: {{inventory.quantity}} piece</div>
+                    <div class="col">Quantity: <span class="alert alert-success fw-bold p-1 m-0">{{inventory.quantity}} piece</span></div>
                 </div>
-                <div class="mt-5 row">
-                    <div class="col text-danger">Cost(per unit): {{inventory.product.cost}} BDT</div>
-                    <div class="col">Price(per unit): {{inventory.product.price}} BDT</div>
-                    
-                </div>
-                <div class="mt-5 row">
-                    <div class="col text-danger">Total Cost: {{inventory.total_cost}} BDT</div>
-                    <div class="col text-success">Quantity Valuation: {{inventory.valuation}} BDT</div>
-                </div>
-                <div class="mt-5 row">
+                <table class="mt-5 m-0 table table-bordered border-secondary">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Product Cost</td>
+                            <td class="text-center text-danger">{{inventory.unit_cost}} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Total Cost</td>
+                            <td class="text-center text-danger">{{inventory.total_cost}} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Product Price</td>
+                            <td class="text-center text-success fw-bold">{{inventory.unit_price}} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Quantity Valuation</td>
+                            <td class="text-center text-success">{{inventory.valuation}} BDT</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- <div class="mt-5 row">
                     <div class="col">Released year: {{inventory.product.released_year}}</div>
                 </div>
-                <div class="mt-3">Description: {{inventory.product.description}}</div>
-                <div class="row mt-4">
-                    <a href="{%url 'inventory-update' inventory.id %}" class="col btn btn-outline-secondary">Update inventory</a>
-                    <a href="{%url 'product-update' inventory.product.id %}" class="ms-1 col btn btn-outline-secondary">Edit product</a>
-                    <a href="{%url 'inventory-delete' inventory.id %}" class="ms-1 col btn btn-outline-danger">Delete</a>
+                <div class="mt-3">Description: {{inventory.product.description}}</div> -->
+                <div class="row p-2 mt-5">
+                    <a href="{%url 'product-details' inventory.product.id %}" class="col btn btn-outline-success">Product Details</a>
+                    <a href="{%url 'inventory-update' inventory.id %}" class="ms-2 col btn btn-outline-secondary">Update inventory</a>
+                    <a href="{%url 'inventory-delete' inventory.id %}" class="ms-2 col btn btn-outline-danger">Delete</a>
                 </div>
             </div>
             <div class="mt-4 col">

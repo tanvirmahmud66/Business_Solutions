@@ -1,28 +1,18 @@
 from django.urls import path
 from .views import DashboardView, InventoryView, CategoryListView,CreateCategoryView,StoreManageView, OrderView, ReportView
-from .views import CreateBrandView, BrandListView, InventoryListView, ProductListView, CreateInventoryView, CreateProductView, InventoryDetailsView, InventoryUpdateView, InventoryDeleteView
+from .views import CreateBrandView, BrandListView, InventoryListView, ProductListView, CreateProductView, InventoryDetailsView, InventoryUpdateView, InventoryDeleteView
 
 from .views import (
     DashboardView,
 
     InventoryView,
     InventoryListView,
-    CreateInventoryView,
     InventoryDetailsView,
     InventoryUpdateView,
     InventoryDeleteView,
 
-    SalesListView,
-    SalesCreateView,
-    SalesDetailsView,
-    SalesUpdateView,
-    SalesDeleteView,
-
-    PurchaseCreateView,
     PurchaseListView,
-    PurchaseDetailsView,
-    PurchaseUpdateView,
-    PurchaseDeleteView,
+    PurchaseCreateView,
 
     ProductListView,
     CreateProductView,
@@ -53,22 +43,12 @@ urlpatterns = [
 
     path('inventory/', InventoryView.as_view(), name='inventory'),
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
-    path('inventory/create-inventory/', CreateInventoryView.as_view(), name='create-inventory'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
     path('inventory/<int:pk>/update/',InventoryUpdateView.as_view(),name='inventory-update'),
     path('inventory/<int:pk>/delete/',InventoryDeleteView.as_view(),name='inventory-delete'),
 
-    path('inventory/purchase/purchase-list/',PurchaseListView.as_view(),name='purchase-list'),
+    path('inventory/purchase/', PurchaseListView.as_view(),name='purchase-list'),
     path('inventory/purchase/new-purchase/',PurchaseCreateView.as_view(),name='new-purchase'),
-    path('inventory/purchase/<int:pk>/details/',PurchaseDetailsView.as_view(),name='purchase-details'),
-    path('inventory/purchase/<int:pk>/update/',PurchaseUpdateView.as_view(),name='purchase-update'),
-    path('inventory/purchase/<int:pk>/delete/',PurchaseDeleteView.as_view(),name='purchase-delete'),
-
-    path('inventory/sales/sales-list/',SalesListView.as_view(),name='sales-list'),
-    path('inventory/sales/new-sale/',SalesCreateView.as_view(),name='new-sale'),
-    path('inventory/sales/<int:pk>/details/',SalesDetailsView.as_view(),name='sales-details'),
-    path('inventory/sales/<int:pk>/update/',SalesUpdateView.as_view(),name='sales-update'),
-    path('inventory/sales/<int:pk>/delete/',SalesDeleteView.as_view(),name='sales-delete'),
 
     path('inventory/product/product-list/', ProductListView.as_view(), name='product-list'),
     path('inventory/product/create-product/', CreateProductView.as_view(), name='create-product'),

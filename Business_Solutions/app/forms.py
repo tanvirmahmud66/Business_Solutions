@@ -1,5 +1,14 @@
 from django import forms
-from .models import Categories, Brand, Inventory, Product, Supplier, Transaction, Purchase, Sale
+from multiupload.fields import MultiFileField
+from .models import (
+    Categories,
+    Brand, 
+    Inventory, 
+    Product, 
+    Supplier,
+    Purchase
+)
+
 
 # ------------------------ Category Form
 class CategoryForm(forms.ModelForm):
@@ -39,20 +48,13 @@ class SupplierForm(forms.ModelForm):
         }
 
 
-class TransactionForm(forms.ModelForm):
-    class Meta:
-        model = Transaction
-        fields = '__all__'
-    
-
-
 class PurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
-        fields = '__all__'
+        fields = ['category','brand','model','quantity','unit_cost','company_name','contact_person','email','phone_number','address','payment_method','paid_ammount','reference']
+        widgets = {
+            'address': forms.Textarea(attrs={'rows': 1})
+        }
+    
 
 
-class SaleForm(forms.ModelForm):
-    class Meta:
-        model = Sale
-        fields = '__all__'

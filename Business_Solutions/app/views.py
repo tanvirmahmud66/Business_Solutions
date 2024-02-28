@@ -1,4 +1,9 @@
+from django.shortcuts import redirect
+from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.shortcuts import render
+from django.db import IntegrityError
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import DeleteView
@@ -9,20 +14,17 @@ from .models import (
     Brand, 
     Inventory, 
     Product, 
-    Supplier, 
-    Transaction,
+    Supplier,
     Purchase,
-    Sale,
+    Transaction,
 )
 from .forms import (
     CategoryForm , 
     BrandForm, 
     InventoryForm, 
     Productform, 
-    SupplierForm, 
-    TransactionForm,
+    SupplierForm,
     PurchaseForm,
-    SaleForm
 )
 
 
@@ -40,54 +42,13 @@ class InventoryView(ListView):
         brands = Brand.objects.all().order_by('id')[:5]
         products = Product.objects.all().order_by('-id')[:5]
         inventories = Inventory.objects.all().order_by('-id')[:5]
-        transactions = Transaction.objects.all().order_by('-id')[:5]
 
         return {
             'inventories': inventories,
             'products': products,
             'categories': categories,
             'brands': brands,
-            'transactions':transactions,
         }
-
-
-
-# ---------------------------------------------------------------Sales list view
-class SalesListView(ListView):
-    model = Sale
-    context_object_name = 'sales'
-    template_name = 'inventory/sales/salesList.html'
-
-
-# ---------------------------------------------------------------Sales create view
-class SalesCreateView(CreateView):
-    model = Sale
-    form_class = SaleForm
-    template_name = 'inventory/sales/salesCreate.html'
-    success_url = reverse_lazy('sales-list')
-
-# ---------------------------------------------------------------Sales details view
-class SalesDetailsView(DetailView):
-    model = Sale
-    context_object_name = 'sale'
-    template_name = 'inventory/sales/salesDetails.html'
-
-
-# ---------------------------------------------------------------Sales update view
-class SalesUpdateView(UpdateView):
-    model = Sale
-    form_class = SaleForm
-    context_object_name = 'sale'
-    template_name = 'inventory/sales/salesUpdate.html'
-    success_url = reverse_lazy('sales-list')
-
-
-# ---------------------------------------------------------------Sales delete view
-class SalesDeleteView(DeleteView):
-    model = Sale
-    context_object_name = 'sale'
-    template_name = 'inventory/sales/salesDelete.html'
-    success_url = reverse_lazy('sales-list')
 
 
 # ---------------------------------------------------------------Inventory list view
@@ -143,14 +104,6 @@ class InventoryListView(ListView):
         return queryset
     
 
-# ---------------------------------------------------------------Inventory create view
-class CreateInventoryView(CreateView):
-    model = Inventory
-    form_class = InventoryForm
-    template_name = 'inventory/addInventory.html'
-
-    def get_success_url(self):
-        return reverse('inventory-list')
 
 ## ---------------------------------------------------------------Inventory detail view
 class InventoryDetailsView(DetailView):
@@ -167,6 +120,16 @@ class InventoryUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('inventory-details',kwargs={'pk': self.object.pk})
+    
+    def form_valid(self, form):
+        self.unit_price = form.cleaned_data['unit_price']
+        self.unit_cost = form.cleaned_data['unit_cost']
+        product = Product.objects.get(id=self.object.product.id)
+        if product:
+            product.cost = self.unit_cost
+            product.price = self.unit_price
+            product.save()
+        return super().form_valid(form)
 
 # ---------------------------------------------------------------Inventory delete view
 class InventoryDeleteView(DeleteView):
@@ -176,44 +139,82 @@ class InventoryDeleteView(DeleteView):
     success_url = reverse_lazy('inventory-list')
 
 
-# ---------------------------------------------------------------Purchase list View
-class PurchaseListView(ListView):
-    model = Purchase
-    context_object_name = 'purchases'
+#----------------------------------------------------------------Purchase list view
+class PurchaseListView(TemplateView):
     template_name = 'inventory/purchase/purchaseList.html'
 
-# ---------------------------------------------------------------Purchase create View
+
+# --------------------------------------------------------------- new Purchase view
 class PurchaseCreateView(CreateView):
     model = Purchase
     form_class = PurchaseForm
-    template_name = 'inventory/purchase/purchaseCreate.html'
+    template_name = 'inventory/purchase/newPurchase.html'
     success_url = reverse_lazy('purchase-list')
 
-# ---------------------------------------------------------------Purchase detail View
-class PurchaseDetailsView(DetailView):
-    model = Purchase
-    context_object_name = 'purchase'
-    template_name = 'inventory/purchase/purchaseDetails.html'
+    def form_valid(self, form):
+        category = form.cleaned_data['category']
+        brand = form.cleaned_data['brand']
+        model = form.cleaned_data['model']
+        quantity = form.cleaned_data['quantity']
+        unit_cost = form.cleaned_data['unit_cost']
+        company_name = form.cleaned_data['company_name']
+        contact_person = form.cleaned_data['contact_person']
+        email = form.cleaned_data['email']
+        phone_number = form.cleaned_data['phone_number']
+        address = form.cleaned_data['address']
+        payment_method = form.cleaned_data['payment_method']
+        paid_ammount = form.cleaned_data['paid_ammount']
+        reference = form.cleaned_data['reference']
 
-# ---------------------------------------------------------------Purchase update View
-class PurchaseUpdateView(UpdateView):
-    model = Purchase
-    form_class = PurchaseForm
-    template_name = 'inventory/purchase/purchaseUpdate.html'
-    success_url = reverse_lazy('purchase-list')
+        if not Categories.objects.filter(category=category).exists():
+            self.new_category = Categories.objects.create(category=category)
+        else:
+            self.new_category = Categories.objects.get(category=category)
+        
+        if not Brand.objects.filter(brand=brand).exists():
+            self.new_brand = Brand.objects.create(brand=brand)
+        else:
+            self.new_brand = Brand.objects.get(brand=brand)
+        
+        if not Product.objects.filter(category__category=category, brand__brand=brand, model=model).exists():
+            self.new_product = Product.objects.create(category=self.new_category, brand=self.new_brand, model=model, cost=unit_cost)
+            self.new_product.save()
+        else:
+            self.new_product = Product.objects.get(category__category=category, brand__brand=brand, model=model)
 
-# ---------------------------------------------------------------Purchase update View
-class PurchaseDeleteView(DeleteView):
-    model = Purchase
-    context_object_name = 'purchase'
-    template_name = 'inventory/purchase/purchaseDelete.html'
-    success_url = reverse_lazy('purchase-list')
+        if Inventory.objects.filter(product=self.new_product).exists():
+            self.get_inventory = Inventory.objects.get(product=self.new_product)
+            self.get_inventory.quantity += quantity
+            self.get_inventory.save()
+        else:
+            self.new_inventory = Inventory.objects.create(
+                product=self.new_product,
+                quantity=quantity,
+                unit_cost=unit_cost,
+            )
+            self.new_inventory.save()
+        
+        if not Supplier.objects.filter(product=self.new_product,company_name=company_name, email=email, phone_number=phone_number, contact_person=contact_person).exists():
+            self.new_supplier = Supplier.objects.create(product=self.new_product,company_name=company_name, email=email, phone_number=phone_number, contact_person=contact_person, address=address)
+
+        self.object = form.save()
+
+        self.new_transaction = Transaction.objects.create(
+            product=self.new_product,
+            transaction_type = "OUT",
+            payment_method=payment_method,
+            amount = paid_ammount,
+            reference = reference,
+            transaction_date = self.object.purchase_date
+        )        
+        return super().form_valid(form)
+
 
 # ---------------------------------------------------------------product list View
 class ProductListView(ListView):
     model = Product
     context_object_name = 'products'
-    template_name = 'inventory/productList.html'
+    template_name = 'inventory/product/productList.html'
     categories_model = Categories.objects.all()
     brand_model = Brand.objects.all()
     extra_context = {
@@ -266,7 +267,7 @@ class ProductListView(ListView):
 class CreateProductView(CreateView):
     model = Product
     form_class = Productform
-    template_name = 'inventory/addProduct.html'
+    template_name = 'inventory/product/addProduct.html'
 
     def get_success_url(self):
         return reverse('product-list')
@@ -275,14 +276,14 @@ class CreateProductView(CreateView):
 class ProductDetailsView(DetailView):
     model = Product
     context_object_name = 'product'
-    template_name = 'inventory/productDetails.html'
+    template_name = 'inventory/product/productDetails.html'
 
 # ---------------------------------------------------------------Product update view
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = Productform
     context_object_name = 'product'
-    template_name = 'inventory/productUpdate.html'
+    template_name = 'inventory/product/productUpdate.html'
 
     def get_success_url(self):
         return reverse('product-details',kwargs={'pk': self.object.pk})
@@ -291,7 +292,7 @@ class ProductUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     model = Product
     context_object_name = 'product'
-    template_name = 'inventory/productDelete.html'
+    template_name = 'inventory/product/productDelete.html'
     success_url = reverse_lazy('product-list')
 
 
@@ -299,7 +300,7 @@ class ProductDeleteView(DeleteView):
 class CreateCategoryView(CreateView):
     model = Categories
     form_class = CategoryForm
-    template_name = 'inventory/addCategory.html'
+    template_name = 'inventory/category/addCategory.html'
 
     def get_success_url(self):
         return reverse('category-list')
@@ -308,21 +309,28 @@ class CreateCategoryView(CreateView):
 class CategoryListView(ListView):
     model = Categories
     context_object_name = 'categories'
-    template_name = 'inventory/allcategory.html'
+    template_name = 'inventory/category/allcategory.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', None)
+        if search_query:
+            queryset = queryset.filter(category__icontains=search_query)
+        return queryset
 
 # ---------------------------------------------------------------Category Update view
 class CategoryUpdateView(UpdateView):
     model = Categories
     form_class = CategoryForm
     context_object_name = 'category'
-    template_name = 'inventory/categoryUpdate.html'
+    template_name = 'inventory/category/categoryUpdate.html'
     success_url = reverse_lazy('category-list')
 
 # ---------------------------------------------------------------Category Delete view
 class CategoryDeleteView(DeleteView):
     model = Categories
     context_object_name = 'category'
-    template_name = 'inventory/categoryDelete.html'
+    template_name = 'inventory/category/categoryDelete.html'
     success_url = reverse_lazy('category-list')
 
 
@@ -330,13 +338,20 @@ class CategoryDeleteView(DeleteView):
 class BrandListView(ListView):
     model = Brand
     context_object_name = 'brands'
-    template_name = 'inventory/brandList.html'
+    template_name = 'inventory/brand/brandList.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', None)
+        if search_query:
+            queryset = queryset.filter(brand__icontains=search_query)
+        return queryset
 
 # ---------------------------------------------------------------Brand create view
 class CreateBrandView(CreateView):
     model = Brand
     form_class = BrandForm
-    template_name = 'inventory/addbrand.html'
+    template_name = 'inventory/brand/addbrand.html'
 
     def get_success_url(self):
         return reverse('brand-list')
@@ -346,14 +361,14 @@ class BrandUpdateView(UpdateView):
     model = Brand
     form_class = BrandForm
     context_object_name = 'brand'
-    template_name = 'inventory/brandUpdate.html'
+    template_name = 'inventory/brand/brandUpdate.html'
     success_url = reverse_lazy('brand-list')
 
 # ---------------------------------------------------------------Brand Delete view
 class BrandDeleteView(DeleteView):
     model = Brand
     context_object_name = 'brand'
-    template_name = 'inventory/brandDelete.html'
+    template_name = 'inventory/brand/brandDelete.html'
     success_url = reverse_lazy('brand-list')
 
 

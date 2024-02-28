@@ -2,7 +2,8 @@
 {% load static %}
 
 <!-- titile -->
-{%block title%} Purchase List | Amar Shop{%endblock title%}
+
+{%block title%} Purchase List | Amar Shop {%endblock title%}
 
 {%block link%}
     <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
@@ -10,49 +11,18 @@
 
 <!-- main body -->
 {%block main%}
-<div class="inventory p-2">
-    
+<div class="inventory">
+
     <div class="card height-100">
         <div class="card-header d-flex justify-content-between align-items-center">
             <a href="{%url 'inventory'%}" class="btn-back">
                 <img src="{%static 'icons/inventory/back.png'%}" width="25" alt=""/>
             </a>
-            <div class="fs-4 fw-bold">Purchases</div>
-            <a href="{%url 'new-purchase'%}" class="btn btn-success btn-sm">New purchase</a>
+            <div class="fs-4 fw-bold">Purchase List</div>
+            <a href="{%url 'new-purchase'%}" class="btn btn-success btn-sm">New Purchase</a>
         </div>
-        <div class="card-header">Filtering section here</div>
-        
-        <div class="card-body overflow-scroll">
-            <table class="table table-bordered border-warning">
-                <thead class="table-secondary">
-                    <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col" class="text-center">Supplier</th>
-                        <th scope="col" class="text-center">Purchase Date</th>
-                        <th scope="col" class="text-center">detail</th>
-                        <th scope="col" class="text-center">Quantity</th>
-                        <th scope="col" class="text-center">Price per unit</th>
-                        <th scope="col" class="text-center">Total Amount</th>
-                        
-                    </tr>
-                </thead>
-                <tbody>
-                    {%for purchase in purchases%}
-                        <tr>
-                            <td class="">{{purchase.product}}</td>
-                            <td class="text-center">{{purchase.supplier}}</td>
-                            <td class="text-center">{{purchase.purchase_date}}</td>
-                            <td class="text-center">
-                                <a href="{%url 'purchase-details' purchase.id %}" class="btn btn-outline-secondary btn-sm">Details</a>
-                            </td>
-                            <td class="text-center"><div class="alert alert-info p-0 m-0 width-auto">{{purchase.quantity}}</div></td>
-                            <td class="text-center">{{purchase.unit_price}} BDT</td>
-                            <td class="text-center text-danger">{{purchase.total_price}} BDT</td>
-                            
-                        </tr>
-                    {%endfor%}
-                </tbody>
-            </table>
+        <div class="card-body">
+            this is card body
         </div>
     </div>
 
