@@ -13,6 +13,9 @@ from .views import (
 
     PurchaseListView,
     PurchaseCreateView,
+    PurchaseDetailsView,
+    PurchaseUpdateView,
+    PurchaseDeleteView,
 
     ProductListView,
     CreateProductView,
@@ -49,6 +52,9 @@ urlpatterns = [
 
     path('inventory/purchase/', PurchaseListView.as_view(),name='purchase-list'),
     path('inventory/purchase/new-purchase/',PurchaseCreateView.as_view(),name='new-purchase'),
+    path('inventory/purchase/<int:pk>/details/',PurchaseDetailsView.as_view(),name='purchase-details'),
+    path('inventory/purchase/<int:pk>/update/',PurchaseUpdateView.as_view(),name='purchase-update'),
+    path('inventory/purchase/<int:pk>/delete/',PurchaseDeleteView.as_view(),name='purchase-delete'),
 
     path('inventory/product/product-list/', ProductListView.as_view(), name='product-list'),
     path('inventory/product/create-product/', CreateProductView.as_view(), name='create-product'),

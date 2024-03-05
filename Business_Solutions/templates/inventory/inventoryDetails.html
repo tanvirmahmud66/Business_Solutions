@@ -14,13 +14,14 @@
 <div class="inventory">
 
    <div class="card height-100 p-5">
-        <div>
+        <div class="d-flex align-items-center">
             <!-- <a href="{{request.META.HTTP_REFERER}}" class="btn-back">
                 <img src="{%static 'icons/inventory/back.gif'%}" width="25" alt=""/>
             </a> -->
             <a href="{%url 'inventory-list'%}" class="btn-back">
                 <img src="{%static 'icons/inventory/back.gif'%}" width="25" alt=""/>
             </a>
+            <div class="ms-4 fw-bolder">Inventory Detail</div>
         </div>
 
         <div class="row height-100">
@@ -72,9 +73,11 @@
                     <a href="{%url 'inventory-delete' inventory.id %}" class="ms-2 col btn btn-outline-danger">Delete</a>
                 </div>
             </div>
-            <div class="mt-4 col">
+            <div class="mt-4 col overflow-hidden d-flex justify-content-center align-items-center">
                 {%if inventory.product.productImg %}
                 <img src="{{ inventory.product.productImg.url }}" alt="Product Image" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+                {%else%}
+                <img src="{% static 'media/default_images/default_product_image.png' %}" alt="{{ product.model }}">
                 {%endif%}
             </div>
         </div>

@@ -4,6 +4,7 @@ from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.db import IntegrityError
+from datetime import datetime
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import DeleteView
@@ -111,6 +112,8 @@ class InventoryDetailsView(DetailView):
     template_name = 'inventory/inventoryDetails.html'
     context_object_name = 'inventory'
 
+
+
 # ---------------------------------------------------------------Inventory Update view
 class InventoryUpdateView(UpdateView):
     model = Inventory
@@ -131,6 +134,8 @@ class InventoryUpdateView(UpdateView):
             product.save()
         return super().form_valid(form)
 
+
+
 # ---------------------------------------------------------------Inventory delete view
 class InventoryDeleteView(DeleteView):
     model = Inventory
@@ -139,9 +144,112 @@ class InventoryDeleteView(DeleteView):
     success_url = reverse_lazy('inventory-list')
 
 
+
 #----------------------------------------------------------------Purchase list view
-class PurchaseListView(TemplateView):
+class PurchaseListView(ListView):
+    model = Purchase
+    context_object_name = 'purchases'
     template_name = 'inventory/purchase/purchaseList.html'
+    categories_model = Categories.objects.all()
+    brand_model = Brand.objects.all()
+    supplier_model = Supplier.objects.all()
+    extra_context = {
+        'categories': categories_model,
+        'brands': brand_model,
+        'suppliers': supplier_model,
+    }
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.request.GET.get('q', None)
+        category = self.request.GET.get('category', None)
+        brand = self.request.GET.get('brand',None)
+        supplier = self.request.GET.get('supplier',None)
+        purchase_date = self.request.GET.get('purchase_date',None)
+
+        if search_query:
+            queryset = queryset.filter(model__icontains=search_query)
+
+        if category:
+            queryset = queryset.filter(category__icontains=category)
+        if brand:
+            queryset = queryset.filter(brand__icontains=brand)
+        if supplier:
+            queryset = queryset.filter(company_name__icontains=supplier)
+        if purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(Q(purchase_date__date=date_object))
+
+        if category and brand and supplier==None and purchase_date==None:
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(brand__icontains=brand)
+            )
+        elif category and brand==None and supplier and purchase_date==None:
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(company_name__icontains=supplier)
+            )
+        elif category and brand==None and supplier==None and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category==None and brand and supplier and purchase_date==None:
+            queryset = queryset.filter(
+                Q(brand__icontains=brand) &
+                Q(company_name__icontains=supplier)
+            )
+        elif category==None and brand and supplier==None and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(brand__icontains=brand) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category==None and brand==None and supplier and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(company_name__icontains=supplier) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category and brand and supplier and purchase_date==None:
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(brand__icontains=brand) &
+                Q(company_name__icontains=supplier)
+            )
+        elif category and brand and supplier==None and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(brand__icontains=brand) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category and brand==None and supplier and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(company_name__icontains=supplier) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category==None and brand and supplier and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(brand__icontains=brand) &
+                Q(company_name__icontains=supplier) &
+                Q(purchase_date__date=date_object)
+            )
+        elif category and brand and supplier and purchase_date:
+            date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
+            queryset = queryset.filter(
+                Q(category__icontains=category) &
+                Q(brand__icontains=brand) &
+                Q(company_name__icontains=supplier) &
+                Q(purchase_date__date=date_object)
+            )
+
+        return queryset
 
 
 # --------------------------------------------------------------- new Purchase view
@@ -209,6 +317,31 @@ class PurchaseCreateView(CreateView):
         )        
         return super().form_valid(form)
 
+
+# --------------------------------------------------------------- Purchase details view
+class PurchaseDetailsView(DetailView):
+    model = Purchase
+    context_object_name = 'purchase'
+    template_name = 'inventory/purchase/purchaseDetails.html'
+
+# --------------------------------------------------------------- Purchase details view
+class PurchaseUpdateView(UpdateView):
+    model = Purchase
+    form_class = PurchaseForm
+    context_object_name = 'purchase'
+    template_name = 'inventory/purchase/purchaseUpdate.html'
+
+    def get_success_url(self):
+        return reverse('purchase-details',kwargs={'pk': self.object.pk})
+    
+
+
+# --------------------------------------------------------------- Purchase details view
+class PurchaseDeleteView(DeleteView):
+    model = Purchase
+    context_object_name = 'purchase'
+    template_name = 'inventory/purchase/purchaseDelete.html'
+    success_url = reverse_lazy('purchase-list')
 
 # ---------------------------------------------------------------product list View
 class ProductListView(ListView):

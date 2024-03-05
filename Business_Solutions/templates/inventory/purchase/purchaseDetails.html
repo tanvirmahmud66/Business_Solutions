@@ -1,0 +1,121 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+<!-- titile -->
+
+{%block title%} Purchase Details | Amar Shop {%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory">
+
+    <div class="card height-100 p-5">
+        <div class="d-flex align-items-center">
+            <a href="{%url 'purchase-list'%}" class="btn-back">
+                <img src="{%static 'icons/inventory/back.gif'%}" width="25" alt=""/>
+            </a>
+            <div class="ms-4 fw-bolder">Purchase Detail</div>
+        </div>
+
+        <div class="row">
+            <div class="mt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="fs-2 fw-bold">{{purchase.model}}</div>
+                    <div class="row width-50 me-1">
+                        <a href="{%url 'purchase-update' purchase.id %}" class="col btn btn-outline-secondary">Update Purchase</a>
+                        <a href="{%url 'purchase-delete' purchase.id %}" class="ms-2 col btn btn-outline-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <table class="mt-5 m-0 table table-bordered border-secondary">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Brand</td>
+                            <td class="text-end">{{purchase.brand}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Category</td>
+                            <td class="text-end">{{purchase.category}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Cost Per Unit</td>
+                            <td class="text-end">{{purchase.unit_cost}} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Quantity</td>
+                            <td class="text-end"><span class="alert alert-info p-0 ps-4 fw-bold pt-1 pb-1 pe-4 m-0">{{purchase.quantity}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Paid amount</td>
+                            <td class="text-end text-danger">{{ purchase.paid_ammount }} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Purchase Date</td>
+                            <td class="text-end text-primary fw-bold">{{purchase.purchase_date}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="mt-5 m-0 table table-bordered border-secondary">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Supplier</td>
+                            <td class="text-end">{{purchase.company_name}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Email</td>
+                            <td class="text-end">{{purchase.email}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Phone Number</td>
+                            <td class="text-end">{{ purchase.phone_number }}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Contact Person</td>
+                            <td class="text-end">{{purchase.contact_person}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Address</td>
+                            <td class="text-end">{{purchase.address}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col">
+                <table class="mt-5 m-0 table table-bordered border-secondary">
+                    <tbody>
+                        <tr>
+                            <td class="fw-bold">Transaction Type</td>
+                            <td class="text-end text-danger">{{purchase.transaction_type}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Payment Method</td>
+                            <td class="text-end">{{purchase.payment_method}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Transaction amount</td>
+                            <td class="text-end text-danger">{{ purchase.paid_ammount }} BDT</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Reference</td>
+                            <td class="text-end">{{purchase.reference}}</td>
+                        </tr>
+                        <tr>
+                            <td class="fw-bold">Date</td>
+                            <td class="text-end">{{purchase.purchase_date}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   </div>
+
+</div>
+{%endblock main%}
+
+
+<!-- -->
