@@ -27,7 +27,7 @@ class InventoryAdminView(admin.ModelAdmin):
 
 
 class SupplierAdminView(admin.ModelAdmin):
-    list_display = ('id', 'product','company_name', 'contact_person', 'email', 'phone_number','address','created_at')
+    list_display = ('id','company_name', 'contact_person', 'email', 'phone_number','address','created_at')
 
 
 class TransactionAdminView(admin.ModelAdmin):
@@ -35,7 +35,7 @@ class TransactionAdminView(admin.ModelAdmin):
 
 
 class PurchaseAdminView(admin.ModelAdmin):
-    list_display = ('id','category','brand','model','quantity','unit_cost','company_name','contact_person','email','phone_number','address','transaction_type','payment_method','paid_ammount','reference','purchase_date')
+    list_display = ('id','category','brand','model','quantity','unit_cost','supplier','transaction_type','payment_method','paid_ammount','reference','due_amount','purchase_date')
 
 
 admin.site.register(Categories, CategroyAdminView)

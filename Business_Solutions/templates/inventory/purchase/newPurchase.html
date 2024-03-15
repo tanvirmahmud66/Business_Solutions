@@ -14,8 +14,11 @@
 <div class="inventory">
 
     <div class="card">
-        <div class="card-header text-center">
-            <div class="fs-4 fw-bold">New Purchase</div>
+        <div class="card-header text-center position-relative">
+            <a href="{%url 'purchase-list'%}" class="btn-back">
+                <img src="{%static 'icons/inventory/back.png'%}" width="20" alt=""/>
+            </a>
+            <div class="fs-4 fw-bold position-absolute top-50 start-50 translate-middle">New Purchase</div>
         </div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
@@ -64,54 +67,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header text-center text-success fw-bolder">Supplier Details</div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="{{ form.company_name_for_label }}" class="form-label">Company Name:</label>
-                                    {{ form.company_name }}
-                                    <div class="text-danger mt-1">
-                                        {{ form.company_name.errors }}
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="{{ form.email_for_label }}" class="form-label">Email Address:</label>
-                                    {{ form.email }}
-                                    <div class="text-danger mt-1">
-                                        {{ form.email.errors }}
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="{{ form.phone_number_for_label }}" class="form-label">Phone No.:</label>
-                                    {{ form.phone_number }}
-                                    <div class="text-danger mt-1">
-                                        {{ form.phone_number.errors }}
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="{{ form.contact_person_for_label }}" class="form-label">Contact Person: </label>
-                                    {{ form.contact_person }}
-                                    <div class="text-danger mt-1">
-                                        {{ form.contact_person.errors }}
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="{{ form.phone_number_for_label }}" class="form-label">Address:</label>
-                                    {{ form.address }}
-                                    <div class="text-danger mt-1">
-                                        {{ form.address.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row mt-3">
                     <div class="col">
                         <div class="card">
-                            <div class="card-header text-center text-success fw-bolder">Transaction Details</div>
+                            <div class="card-header text-center text-success fw-bolder">Purchase Information</div>
                             <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="{{ form.supplier_for_label }}" class="form-label">Product Supplier</label>
+                                    {{ form.supplier }}
+                                    <div class="text-danger mt-1">
+                                        {{ form.supplier.errors }}
+                                    </div>
+                                </div>
                                 <div class="mb-3">
                                     <label for="{{ form.payment_method_for_label }}" class="form-label">Payment Method:</label>
                                     {{ form.payment_method }}

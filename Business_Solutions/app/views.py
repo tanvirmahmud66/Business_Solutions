@@ -150,13 +150,13 @@ class PurchaseListView(ListView):
     model = Purchase
     context_object_name = 'purchases'
     template_name = 'inventory/purchase/purchaseList.html'
-    categories_model = Categories.objects.all()
-    brand_model = Brand.objects.all()
-    supplier_model = Supplier.objects.all()
+    categories = Categories.objects.all()
+    brand = Brand.objects.all()
+    supplier = Supplier.objects.all()
     extra_context = {
-        'categories': categories_model,
-        'brands': brand_model,
-        'suppliers': supplier_model,
+        'categories': categories,
+        'brands': brand,
+        'suppliers': supplier,
     }
 
     def get_queryset(self):
@@ -171,81 +171,81 @@ class PurchaseListView(ListView):
             queryset = queryset.filter(model__icontains=search_query)
 
         if category:
-            queryset = queryset.filter(category__icontains=category)
+            queryset = queryset.filter(category=category)
         if brand:
-            queryset = queryset.filter(brand__icontains=brand)
+            queryset = queryset.filter(brand=brand)
         if supplier:
-            queryset = queryset.filter(company_name__icontains=supplier)
+            queryset = queryset.filter(supplier=supplier)
         if purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(Q(purchase_date__date=date_object))
 
         if category and brand and supplier==None and purchase_date==None:
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(brand__icontains=brand)
+                Q(category=category) &
+                Q(brand=brand)
             )
         elif category and brand==None and supplier and purchase_date==None:
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(company_name__icontains=supplier)
+                Q(category=category) &
+                Q(supplier=supplier)
             )
         elif category and brand==None and supplier==None and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(category__icontains=category) &
+                Q(category=category) &
                 Q(purchase_date__date=date_object)
             )
         elif category==None and brand and supplier and purchase_date==None:
             queryset = queryset.filter(
-                Q(brand__icontains=brand) &
-                Q(company_name__icontains=supplier)
+                Q(brand=brand) &
+                Q(supplier=supplier)
             )
         elif category==None and brand and supplier==None and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(brand__icontains=brand) &
+                Q(brand=brand) &
                 Q(purchase_date__date=date_object)
             )
         elif category==None and brand==None and supplier and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(company_name__icontains=supplier) &
+                Q(supplier=supplier) &
                 Q(purchase_date__date=date_object)
             )
         elif category and brand and supplier and purchase_date==None:
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(brand__icontains=brand) &
-                Q(company_name__icontains=supplier)
+                Q(category=category) &
+                Q(brand=brand) &
+                Q(supplier=supplier)
             )
         elif category and brand and supplier==None and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(brand__icontains=brand) &
+                Q(category=category) &
+                Q(brand=brand) &
                 Q(purchase_date__date=date_object)
             )
         elif category and brand==None and supplier and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(company_name__icontains=supplier) &
+                Q(category=category) &
+                Q(supplier=supplier) &
                 Q(purchase_date__date=date_object)
             )
         elif category==None and brand and supplier and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(brand__icontains=brand) &
-                Q(company_name__icontains=supplier) &
+                Q(brand=brand) &
+                Q(supplier=supplier) &
                 Q(purchase_date__date=date_object)
             )
         elif category and brand and supplier and purchase_date:
             date_object = datetime.strptime(purchase_date, "%Y-%m-%d").date()
             queryset = queryset.filter(
-                Q(category__icontains=category) &
-                Q(brand__icontains=brand) &
-                Q(company_name__icontains=supplier) &
+                Q(category=category) &
+                Q(brand=brand) &
+                Q(supplier=supplier) &
                 Q(purchase_date__date=date_object)
             )
 
@@ -265,30 +265,15 @@ class PurchaseCreateView(CreateView):
         model = form.cleaned_data['model']
         quantity = form.cleaned_data['quantity']
         unit_cost = form.cleaned_data['unit_cost']
-        company_name = form.cleaned_data['company_name']
-        contact_person = form.cleaned_data['contact_person']
-        email = form.cleaned_data['email']
-        phone_number = form.cleaned_data['phone_number']
-        address = form.cleaned_data['address']
         payment_method = form.cleaned_data['payment_method']
         paid_ammount = form.cleaned_data['paid_ammount']
         reference = form.cleaned_data['reference']
 
-        if not Categories.objects.filter(category=category).exists():
-            self.new_category = Categories.objects.create(category=category)
-        else:
-            self.new_category = Categories.objects.get(category=category)
-        
-        if not Brand.objects.filter(brand=brand).exists():
-            self.new_brand = Brand.objects.create(brand=brand)
-        else:
-            self.new_brand = Brand.objects.get(brand=brand)
-        
-        if not Product.objects.filter(category__category=category, brand__brand=brand, model=model).exists():
-            self.new_product = Product.objects.create(category=self.new_category, brand=self.new_brand, model=model, cost=unit_cost)
+        if not Product.objects.filter(category=category, brand=brand, model=model).exists():
+            self.new_product = Product.objects.create(category=category, brand=brand, model=model, cost=unit_cost)
             self.new_product.save()
         else:
-            self.new_product = Product.objects.get(category__category=category, brand__brand=brand, model=model)
+            self.new_product = Product.objects.get(category=category, brand=brand, model=model)
 
         if Inventory.objects.filter(product=self.new_product).exists():
             self.get_inventory = Inventory.objects.get(product=self.new_product)
@@ -302,9 +287,6 @@ class PurchaseCreateView(CreateView):
             )
             self.new_inventory.save()
         
-        if not Supplier.objects.filter(product=self.new_product,company_name=company_name, email=email, phone_number=phone_number, contact_person=contact_person).exists():
-            self.new_supplier = Supplier.objects.create(product=self.new_product,company_name=company_name, email=email, phone_number=phone_number, contact_person=contact_person, address=address)
-
         self.object = form.save()
 
         self.new_transaction = Transaction.objects.create(
@@ -323,6 +305,14 @@ class PurchaseDetailsView(DetailView):
     model = Purchase
     context_object_name = 'purchase'
     template_name = 'inventory/purchase/purchaseDetails.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        purchase = self.get_object()
+        supplier = purchase.supplier
+        context['supplier'] = supplier
+        return context
+
 
 # --------------------------------------------------------------- Purchase details view
 class PurchaseUpdateView(UpdateView):

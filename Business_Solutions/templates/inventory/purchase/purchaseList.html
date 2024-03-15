@@ -37,7 +37,7 @@
                     <select name="supplier" class="form-select" id="inputGroupSelect02">
                       <option disabled selected>suppliers...</option>
                       {%for supplier in suppliers%}
-                        <option value="{{supplier.company_name}}">{{supplier}}</option>
+                        <option value="{{supplier.id}}">{{supplier}}</option>
                       {%endfor%}
                     </select>
                 </div>
@@ -45,7 +45,7 @@
                   <select name="brand" class="form-select" id="inputGroupSelect02">
                     <option disabled selected>brands...</option>
                     {%for brand in brands%}
-                      <option value="{{brand.brand}}">{{brand}}</option>
+                      <option value="{{brand.id}}">{{brand}}</option>
                     {%endfor%}
                   </select>
                 </div>                     
@@ -53,23 +53,23 @@
                   <select name="category" class="form-select" id="inputGroupSelect02">
                     <option disabled selected>categories...</option>
                     {%for category in categories%}
-                      <option value="{{category.category}}">{{category}}</option>
+                      <option value="{{category.id}}">{{category}}</option>
                     {%endfor%}
                   </select>
                 </div>
                 <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>
           </form>        
         </div>
-        <div class="card-body overflow-scroll">
+        <div class="card-body p-0 ps-3 pe-3 overflow-scroll">
             <table class="table table-bordered border-warning">
-                <thead class="table-secondary">
+                <thead class="table-secondary sticky-top">
                     <tr>
                         <th scope="col">Product</th>
                         <th scope="col" class="text-center">Brand</th>
                         <th scope="col" class="text-center">Category</th>
                         <th scope="col" class="text-center">Quantity</th>
-                        <th scope="col" class="text-center">Unit Cost</th>
-                        <th scope="col" class="text-center">Amount</th>
+                        <th scope="col" class="text-center">Unit Cost (BDT)</th>
+                        <th scope="col" class="text-center">Amount (BDT)</th>
                         <th scope="col" class="text-center">Purchase Date</th>
                         <th scope="col" class="text-center">Supplier</th>
                         <th scope="col" class="text-center">Option</th>
@@ -78,14 +78,16 @@
                 <tbody>
                     {%for each in purchases%}
                         <tr>
-                            <td class="text-primary">{{each.model}}</td>
+                            <td class="">
+                                <a class="text-primary" href="{%url 'purchase-details' each.id%}">{{each.model}}</a>
+                            </td>
                             <td class="text-center">{{each.brand}}</td>
                             <td class="text-center">{{each.category}}</td>
                             <td class="text-center">{{each.quantity}}</td>
-                            <td class="text-center">{{each.unit_cost}} BDT</td>
-                            <td class="text-center text-danger">{{each.paid_ammount}} BDT</td>
-                            <td class="text-center">{{each.purchase_date}}</td>
-                            <td class="text-center text-primary">{{each.company_name}}</td>
+                            <td class="text-center">{{each.unit_cost}}</td>
+                            <td class="text-center text-danger">{{each.paid_ammount}}</td>
+                            <td class="text-center">{{each.purchase_date.date}}</td>
+                            <td class="text-center text-primary">{{each.supplier}}</td>
                             <td class="text-center text-primary">
                                 <a href="{%url 'purchase-details' each.id%}" class="btn btn-sm btn-outline-secondary">details</a>
                             </td>

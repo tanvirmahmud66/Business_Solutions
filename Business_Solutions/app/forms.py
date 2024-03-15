@@ -51,7 +51,7 @@ class SupplierForm(forms.ModelForm):
 class PurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
-        fields = ['category','brand','model','quantity','unit_cost','company_name','contact_person','email','phone_number','address','payment_method','paid_ammount','reference']
+        fields = ['category','brand','model','quantity','unit_cost','supplier','payment_method','paid_ammount','reference']
         widgets = {
             'address': forms.Textarea(attrs={'rows': 1})
         }

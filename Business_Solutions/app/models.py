@@ -11,7 +11,7 @@ class Categories(models.Model):
     category = models.CharField(max_length=255, unique=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-id']
 
     def __str__(self):
         return self.category
@@ -23,7 +23,7 @@ class Brand(models.Model):
     brand = models.CharField(max_length=255, unique=True)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-id']
     
     def __str__(self):
         return self.brand
@@ -57,7 +57,6 @@ class Product(models.Model):
 
 #------------------------------------------------- supplier model
 class Supplier(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     company_name = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
@@ -134,28 +133,30 @@ class Purchase(models.Model):
         ('Payoneer','Payoneer'),
     ]
 
-    category = models.CharField(max_length=255)
-    brand = models.CharField(max_length=255)
+    category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     model = models.CharField(max_length=255)
 
     quantity = models.PositiveIntegerField()
     unit_cost = models.PositiveIntegerField()
 
-    company_name = models.CharField(max_length=255)
-    contact_person = models.CharField(max_length=255)
-    email = models.EmailField()
-    phone_number = models.CharField(max_length=20)
-    address = models.TextField()
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
 
     transaction_type = models.CharField(null=True,blank=True,default='OUT')
     payment_method = models.CharField(max_length=50,choices=PAYMENT_METHOD)
     paid_ammount = models.PositiveBigIntegerField()
     reference = models.CharField(max_length=100,null=True,blank=True) 
 
+    due_amount = models.PositiveBigIntegerField(default=0)
+
     purchase_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ['purchase_date']
+
+    def save(self, *args, **kwargs):
+        self.due_amount = (self.quantity*self.unit_cost) - self.paid_ammount
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return self.model
