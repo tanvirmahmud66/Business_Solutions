@@ -86,7 +86,7 @@
                         <td class="text-center text-success">{{inventory.unit_price}} BDT</td>
                         {%else%}
                         <td class="text-center">
-                            <a class="btn btn-sm btn-outline-success">Set Price</a>
+                            <a href="{%url 'inventory-setPrice' inventory.id%}" class="btn btn-sm btn-outline-success">Set Price</a>
                         </td>
                         {%endif%}
                         <td class="text-center text-danger">{{ inventory.unit_cost }} BDT</td>

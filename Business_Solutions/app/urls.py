@@ -8,6 +8,7 @@ from .views import (
     InventoryView,
     InventoryListView,
     InventoryDetailsView,
+    InventoryPriceSet,
     InventoryUpdateView,
     InventoryDeleteView,
 
@@ -47,6 +48,7 @@ urlpatterns = [
     path('inventory/', InventoryView.as_view(), name='inventory'),
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
+    path('inventory/<int:pk>/set-price/',InventoryPriceSet.as_view(),name='inventory-setPrice'),
     path('inventory/<int:pk>/update/',InventoryUpdateView.as_view(),name='inventory-update'),
     path('inventory/<int:pk>/delete/',InventoryDeleteView.as_view(),name='inventory-delete'),
 

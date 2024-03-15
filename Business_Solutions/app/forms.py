@@ -28,6 +28,10 @@ class InventoryForm(forms.ModelForm):
         model = Inventory
         fields = '__all__'
 
+class InventoryPriceSetForm(forms.ModelForm):
+    class Meta:
+        model = Inventory
+        fields = ['unit_price']
 
 class Productform(forms.ModelForm):
     class Meta:

@@ -22,7 +22,8 @@ from .models import (
 from .forms import (
     CategoryForm , 
     BrandForm, 
-    InventoryForm, 
+    InventoryForm,
+    InventoryPriceSetForm,
     Productform, 
     SupplierForm,
     PurchaseForm,
@@ -112,7 +113,21 @@ class InventoryDetailsView(DetailView):
     template_name = 'inventory/inventoryDetails.html'
     context_object_name = 'inventory'
 
+#---------------------------------------------------------------- Inventory Priduct price set
+class InventoryPriceSet(UpdateView):
+    model = Inventory
+    form_class = InventoryPriceSetForm
+    context_object_name = 'inventory'
+    template_name = 'inventory/inventorySetPrice.html'
+    success_url = reverse_lazy('inventory-list')
 
+    def form_valid(self, form):
+        self.unit_price = form.cleaned_data['unit_price']
+        product = Product.objects.get(id=self.object.product.id)
+        if product:
+            product.price = self.unit_price
+            product.save()
+        return super().form_valid(form)
 
 # ---------------------------------------------------------------Inventory Update view
 class InventoryUpdateView(UpdateView):
