@@ -3,9 +3,16 @@ from .views import DashboardView, InventoryView, CategoryListView,CreateCategory
 from .views import CreateBrandView, BrandListView, InventoryListView, ProductListView, CreateProductView, InventoryDetailsView, InventoryUpdateView, InventoryDeleteView
 
 from .views import (
+
+    AdminCreateView,
+    AdminLoginView,
+    AdminLogoutView,
+
     DashboardView,
 
     InventoryView,
+    SalesListView,
+
     InventoryListView,
     InventoryDetailsView,
     InventoryPriceSet,
@@ -42,10 +49,16 @@ from .views import (
 )
 
 urlpatterns = [
+
+    path('',AdminLoginView.as_view(),name='admin-login'),
+    path('signup/',AdminCreateView.as_view(),name='admin-signup'),
+    path('logout/', AdminLogoutView.as_view(), name='admin-logout'),
+
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
 
-
     path('inventory/', InventoryView.as_view(), name='inventory'),
+    path('inventory/sales-list/',SalesListView.as_view(),name='sales-list'),
+
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
     path('inventory/<int:pk>/set-price/',InventoryPriceSet.as_view(),name='inventory-setPrice'),

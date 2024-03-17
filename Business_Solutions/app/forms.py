@@ -1,6 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from multiupload.fields import MultiFileField
 from .models import (
+    User,
     Categories,
     Brand, 
     Inventory, 
@@ -8,6 +10,28 @@ from .models import (
     Supplier,
     Purchase
 )
+
+# ---------------------------------------Admin create Form
+class AdminCreateForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_staff = True
+        user.is_superuser = True
+        if commit:
+            user.save()
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        user = User.objects.create_user(email, password=password, **extra_fields)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)  # Ensure the proper database is used
+        return user
+
 
 
 # ------------------------ Category Form

@@ -1,15 +1,21 @@
-from django.shortcuts import redirect
-from django.db.models.query import QuerySet
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
 from django.forms import BaseModelForm
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.db import IntegrityError
-from datetime import datetime
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView, ListView, CreateView, DetailView, UpdateView
 from django.views.generic.edit import DeleteView
-from django.db.models import F, Sum
 from django.db.models import Q
+from django.views.generic import (
+    FormView,
+    TemplateView, 
+    ListView, 
+    CreateView, 
+    DetailView, 
+    UpdateView
+)
 from .models import (
     Categories, 
     Brand, 
@@ -20,6 +26,7 @@ from .models import (
     Transaction,
 )
 from .forms import (
+    AdminCreateForm,
     CategoryForm , 
     BrandForm, 
     InventoryForm,
@@ -29,13 +36,46 @@ from .forms import (
     PurchaseForm,
 )
 
+# =========================================AUTHENTICATION SECTION===================================
+# ----------------------------------------------------Permission Mixin
+class SuperuserRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_superuser
+    
+# -------------------------------------------------Admin singup view
+class AdminCreateView(CreateView):
+    template_name = 'authentication/singup.html'
+    form_class = AdminCreateForm
+    success_url = reverse_lazy('dashboard')
 
-class DashboardView(TemplateView):
+
+# -------------------------------------------------Admin login view
+class AdminLoginView(LoginView):
+    template_name = 'authentication/login.html'
+    success_url = reverse_lazy('dashboard')
+
+    def get_success_url(self):
+        if self.request.user.is_superuser:
+            return reverse_lazy('dashboard')
+        else:
+            print("User is not staff")
+            return reverse_lazy('admin-login')
+
+
+# ----------------------------------------------------------Admin login view
+class AdminLogoutView(SuperuserRequiredMixin, LogoutView):
+    next_page = reverse_lazy('admin-login')
+        
+
+
+# =========================================DASHBOARD SECTION========================================
+class DashboardView(SuperuserRequiredMixin, TemplateView):
     template_name = 'dashboard/index.html'
+
 
 # ==========================================INVENTORY SECTION=======================================
 # ---------------------------------------------------------------Inventory View
-class InventoryView(ListView):
+class InventoryView(SuperuserRequiredMixin,ListView):
     template_name = 'inventory/inventory.html'
     context_object_name = 'data'
 
@@ -53,8 +93,13 @@ class InventoryView(ListView):
         }
 
 
+# --------------------------------------------------------------- Sales List View
+class SalesListView(TemplateView):
+    template_name = 'inventory/sales/salesList.html'
+
+
 # ---------------------------------------------------------------Inventory list view
-class InventoryListView(ListView):
+class InventoryListView(SuperuserRequiredMixin,ListView):
     model = Inventory
     context_object_name = 'inventories'
     template_name = 'inventory/inventoryList.html'
@@ -108,13 +153,14 @@ class InventoryListView(ListView):
 
 
 ## ---------------------------------------------------------------Inventory detail view
-class InventoryDetailsView(DetailView):
+class InventoryDetailsView(SuperuserRequiredMixin,DetailView):
     model = Inventory
     template_name = 'inventory/inventoryDetails.html'
     context_object_name = 'inventory'
 
+
 #---------------------------------------------------------------- Inventory Priduct price set
-class InventoryPriceSet(UpdateView):
+class InventoryPriceSet(SuperuserRequiredMixin,UpdateView):
     model = Inventory
     form_class = InventoryPriceSetForm
     context_object_name = 'inventory'
@@ -129,8 +175,9 @@ class InventoryPriceSet(UpdateView):
             product.save()
         return super().form_valid(form)
 
+
 # ---------------------------------------------------------------Inventory Update view
-class InventoryUpdateView(UpdateView):
+class InventoryUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Inventory
     form_class = InventoryForm
     context_object_name = 'inventory'
@@ -152,7 +199,7 @@ class InventoryUpdateView(UpdateView):
 
 
 # ---------------------------------------------------------------Inventory delete view
-class InventoryDeleteView(DeleteView):
+class InventoryDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Inventory
     template_name = 'inventory/inventoryDelete.html'
     context_object_name = 'inventory'
@@ -161,7 +208,7 @@ class InventoryDeleteView(DeleteView):
 
 
 #----------------------------------------------------------------Purchase list view
-class PurchaseListView(ListView):
+class PurchaseListView(SuperuserRequiredMixin,ListView):
     model = Purchase
     context_object_name = 'purchases'
     template_name = 'inventory/purchase/purchaseList.html'
@@ -268,7 +315,7 @@ class PurchaseListView(ListView):
 
 
 # --------------------------------------------------------------- new Purchase view
-class PurchaseCreateView(CreateView):
+class PurchaseCreateView(SuperuserRequiredMixin,CreateView):
     model = Purchase
     form_class = PurchaseForm
     template_name = 'inventory/purchase/newPurchase.html'
@@ -316,7 +363,7 @@ class PurchaseCreateView(CreateView):
 
 
 # --------------------------------------------------------------- Purchase details view
-class PurchaseDetailsView(DetailView):
+class PurchaseDetailsView(SuperuserRequiredMixin,DetailView):
     model = Purchase
     context_object_name = 'purchase'
     template_name = 'inventory/purchase/purchaseDetails.html'
@@ -330,7 +377,7 @@ class PurchaseDetailsView(DetailView):
 
 
 # --------------------------------------------------------------- Purchase details view
-class PurchaseUpdateView(UpdateView):
+class PurchaseUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Purchase
     form_class = PurchaseForm
     context_object_name = 'purchase'
@@ -342,14 +389,14 @@ class PurchaseUpdateView(UpdateView):
 
 
 # --------------------------------------------------------------- Purchase details view
-class PurchaseDeleteView(DeleteView):
+class PurchaseDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Purchase
     context_object_name = 'purchase'
     template_name = 'inventory/purchase/purchaseDelete.html'
     success_url = reverse_lazy('purchase-list')
 
 # ---------------------------------------------------------------product list View
-class ProductListView(ListView):
+class ProductListView(SuperuserRequiredMixin,ListView):
     model = Product
     context_object_name = 'products'
     template_name = 'inventory/product/productList.html'
@@ -402,7 +449,7 @@ class ProductListView(ListView):
 
 
 # ---------------------------------------------------------------Product create view
-class CreateProductView(CreateView):
+class CreateProductView(SuperuserRequiredMixin,CreateView):
     model = Product
     form_class = Productform
     template_name = 'inventory/product/addProduct.html'
@@ -411,13 +458,13 @@ class CreateProductView(CreateView):
         return reverse('product-list')
     
 # ---------------------------------------------------------------Product Details view
-class ProductDetailsView(DetailView):
+class ProductDetailsView(SuperuserRequiredMixin,DetailView):
     model = Product
     context_object_name = 'product'
     template_name = 'inventory/product/productDetails.html'
 
 # ---------------------------------------------------------------Product update view
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Product
     form_class = Productform
     context_object_name = 'product'
@@ -426,8 +473,9 @@ class ProductUpdateView(UpdateView):
     def get_success_url(self):
         return reverse('product-details',kwargs={'pk': self.object.pk})
 
+
 # ---------------------------------------------------------------Product Delete View
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Product
     context_object_name = 'product'
     template_name = 'inventory/product/productDelete.html'
@@ -435,7 +483,7 @@ class ProductDeleteView(DeleteView):
 
 
 # ---------------------------------------------------------------Category Create view
-class CreateCategoryView(CreateView):
+class CreateCategoryView(SuperuserRequiredMixin,CreateView):
     model = Categories
     form_class = CategoryForm
     template_name = 'inventory/category/addCategory.html'
@@ -443,8 +491,9 @@ class CreateCategoryView(CreateView):
     def get_success_url(self):
         return reverse('category-list')
 
+
 # ---------------------------------------------------------------Categroy list view
-class CategoryListView(ListView):
+class CategoryListView(SuperuserRequiredMixin,ListView):
     model = Categories
     context_object_name = 'categories'
     template_name = 'inventory/category/allcategory.html'
@@ -456,16 +505,18 @@ class CategoryListView(ListView):
             queryset = queryset.filter(category__icontains=search_query)
         return queryset
 
+
 # ---------------------------------------------------------------Category Update view
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Categories
     form_class = CategoryForm
     context_object_name = 'category'
     template_name = 'inventory/category/categoryUpdate.html'
     success_url = reverse_lazy('category-list')
 
+
 # ---------------------------------------------------------------Category Delete view
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Categories
     context_object_name = 'category'
     template_name = 'inventory/category/categoryDelete.html'
@@ -473,7 +524,7 @@ class CategoryDeleteView(DeleteView):
 
 
 # ---------------------------------------------------------------Brand list view
-class BrandListView(ListView):
+class BrandListView(SuperuserRequiredMixin,ListView):
     model = Brand
     context_object_name = 'brands'
     template_name = 'inventory/brand/brandList.html'
@@ -485,25 +536,28 @@ class BrandListView(ListView):
             queryset = queryset.filter(brand__icontains=search_query)
         return queryset
 
+
 # ---------------------------------------------------------------Brand create view
-class CreateBrandView(CreateView):
+class CreateBrandView(SuperuserRequiredMixin,CreateView):
     model = Brand
     form_class = BrandForm
     template_name = 'inventory/brand/addbrand.html'
 
     def get_success_url(self):
         return reverse('brand-list')
-    
+
+
 # ---------------------------------------------------------------Brand update view
-class BrandUpdateView(UpdateView):
+class BrandUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Brand
     form_class = BrandForm
     context_object_name = 'brand'
     template_name = 'inventory/brand/brandUpdate.html'
     success_url = reverse_lazy('brand-list')
 
+
 # ---------------------------------------------------------------Brand Delete view
-class BrandDeleteView(DeleteView):
+class BrandDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Brand
     context_object_name = 'brand'
     template_name = 'inventory/brand/brandDelete.html'
@@ -514,25 +568,25 @@ class BrandDeleteView(DeleteView):
 
 
 # ==========================================REPORT SECTION=======================================
-class ReportView(TemplateView):
+class ReportView(SuperuserRequiredMixin,TemplateView):
     template_name = 'reports/index.html'
 
 # ==========================================SUPPLIERS SECTION=======================================
 # ---------------------------------------------------------------Supplier List view
-class SuppliersListView(ListView):
+class SuppliersListView(SuperuserRequiredMixin,ListView):
     model = Supplier
     context_object_name = 'suppliers'
     template_name = 'suppliers/supplierList.html'
 
 # ---------------------------------------------------------------Supplier create view
-class SupplierCreateView(CreateView):
+class SupplierCreateView(SuperuserRequiredMixin,CreateView):
     model = Supplier
     form_class = SupplierForm
     template_name = 'suppliers/supplierCreate.html'
     success_url = reverse_lazy('supplier-list')
 
 # ---------------------------------------------------------------Supplier update view
-class SupplierUpdateView(UpdateView):
+class SupplierUpdateView(SuperuserRequiredMixin,UpdateView):
     model = Supplier
     form_class = SupplierForm
     context_object_name = 'supplier'
@@ -540,7 +594,7 @@ class SupplierUpdateView(UpdateView):
     success_url = reverse_lazy('supplier-list')
 
 # ---------------------------------------------------------------Supplier delete view
-class SupplierDeleteView(DeleteView):
+class SupplierDeleteView(SuperuserRequiredMixin,DeleteView):
     model = Supplier
     form_class = SupplierForm
     context_object_name = 'supplier'
@@ -548,9 +602,9 @@ class SupplierDeleteView(DeleteView):
     success_url = reverse_lazy('supplier-list')
 
 # ==========================================ORDER SECTION=======================================
-class OrderView(TemplateView):
+class OrderView(SuperuserRequiredMixin,TemplateView):
     template_name = 'orders/index.html'
 
 # ==========================================MANAGE STORE SECTION=======================================
-class StoreManageView(TemplateView):
+class StoreManageView(SuperuserRequiredMixin,TemplateView):
     template_name = 'manage/index.html'

@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import (
+    User,
     Categories, 
     Brand, 
     Product, 
@@ -9,6 +10,9 @@ from .models import (
     Purchase
 )
 # Register your models here.
+
+class UserAdminView(admin.ModelAdmin):
+    list_display = ('id', 'email', 'first_name', 'last_name', 'is_active', 'is_staff')
 
 class CategroyAdminView(admin.ModelAdmin):
     list_display = ('id', 'category')
@@ -38,6 +42,7 @@ class PurchaseAdminView(admin.ModelAdmin):
     list_display = ('id','category','brand','model','quantity','unit_cost','supplier','transaction_type','payment_method','paid_ammount','reference','due_amount','purchase_date')
 
 
+admin.site.register(User, UserAdminView)
 admin.site.register(Categories, CategroyAdminView)
 admin.site.register(Brand, BrandAdminView)
 admin.site.register(Product,ProductAdminView)

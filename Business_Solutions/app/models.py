@@ -1,12 +1,49 @@
 from django.db import models
-from multiupload.fields import MultiFileField
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, PermissionsMixin
 import os
 
 # Create your models here.
+#============================================================================= Custom user Model
+class UserManager(BaseUserManager):
+    def create_user(self, email,password=None, **extra_fields):
+        if not email:
+            raise ValueError("user must have an email address")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+    
+    def create_superuser(self, email, password=None,**extra_fields):
+        if not email:
+            raise ValueError("user must have an email address")
+        email = self.normalize_email(email)
+        user = self.create_user(email, password, **extra_fields)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        return user
+
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(max_length=255, unique=True)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    def __str__(self):
+        return self.email
+    
+    
 
 
-
-# ------------------------------------------------ Device Categories Model
+# =========================================================================== Device Categories Model
 class Categories(models.Model):
     category = models.CharField(max_length=255, unique=True)
 
@@ -18,7 +55,7 @@ class Categories(models.Model):
     
 
 
-# ------------------------------------------------ Brand Model 
+#============================================================================ Brand Model 
 class Brand(models.Model):
     brand = models.CharField(max_length=255, unique=True)
 
@@ -31,7 +68,7 @@ class Brand(models.Model):
 
 
 
-# ------------------------------------------------ Devices Model
+#============================================================================ Devices Model
 def product_image_path(instance, filename):
     return os.path.join('Product_Image', f'{instance.model}', filename)
 
@@ -55,7 +92,7 @@ class Product(models.Model):
     
     
 
-#------------------------------------------------- supplier model
+#=============================================================================== supplier model
 class Supplier(models.Model):
     company_name = models.CharField(max_length=255)
     contact_person = models.CharField(max_length=255)
@@ -71,7 +108,7 @@ class Supplier(models.Model):
         return self.company_name
 
 
-# -------------------------------------------------- Inventory Model
+#=================================================================================== Inventory Model
 class Inventory(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, unique=True)
     quantity = models.PositiveIntegerField()
@@ -100,7 +137,7 @@ class Inventory(models.Model):
         return self.product.model
 
 
-# ------------------------------------------------- Transaction Model
+#============================================================================== Transaction Model
 class Transaction(models.Model):
     # TRANSACTION_TYPE = [
     #     ('IN', 'IN'),
@@ -117,7 +154,7 @@ class Transaction(models.Model):
         return self.id
 
 
-# -------------------------------------------------- Purchase Model
+#============================================================================ Purchase Model
 class Purchase(models.Model):
     PAYMENT_METHOD = [
         ('Cash', 'Cash'),
@@ -142,7 +179,7 @@ class Purchase(models.Model):
 
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
 
-    transaction_type = models.CharField(null=True,blank=True,default='OUT')
+    transaction_type = models.CharField(max_length=10,null=True,blank=True,default='OUT')
     payment_method = models.CharField(max_length=50,choices=PAYMENT_METHOD)
     paid_ammount = models.PositiveBigIntegerField()
     reference = models.CharField(max_length=100,null=True,blank=True) 
