@@ -174,19 +174,14 @@ class Purchase(models.Model):
     category = models.ForeignKey(Categories, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     model = models.CharField(max_length=255)
-
     quantity = models.PositiveIntegerField()
     unit_cost = models.PositiveIntegerField()
-
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, null=True, blank=True)
-
     transaction_type = models.CharField(max_length=10,null=True,blank=True,default='OUT')
     payment_method = models.CharField(max_length=50,choices=PAYMENT_METHOD)
     paid_ammount = models.PositiveBigIntegerField()
     reference = models.CharField(max_length=100,null=True,blank=True) 
-
     due_amount = models.PositiveBigIntegerField(default=0)
-
     purchase_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

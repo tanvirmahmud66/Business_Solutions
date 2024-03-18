@@ -1,0 +1,41 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+{%block title%} Sales List | Amar Shop{%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory">
+    <div class="card height-100">
+        <div class="m-3">
+            <div>Name: <span class="fw-bold">{{buyer.first_name}} {{buyer.last_name}}</span></div>
+            <div>Email: <span class="fw-bold">{{buyer.email}}</span></div>
+            <div>Phone: <span class="fw-bold">{{buyer.phone}}</span></div>
+        </div>
+        <div class="card-body p-0 ps-3 pe-3">
+            <table class="table table-bordered border-warning">
+                <thead class="table-secondary sticky-top">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col" class="text-center">Quantity</th>
+                        <th scope="col" class="text-center">Unit price</th>
+                        <th scope="col" class="text-center">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for product in product_list%}
+                        <tr>
+                            <td>{{product}}</td>
+                        </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+            <a href="{%url 'invoice-add-item' buyer.email%}" class="btn btn-sm btn-warning">Add Item</a>
+        </div>
+    </div>
+</div>
+{%endblock main%}

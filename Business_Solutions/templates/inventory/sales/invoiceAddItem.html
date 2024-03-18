@@ -1,0 +1,21 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+{%block title%} Sales List | Amar Shop{%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory">
+    <div class="card height-100">
+        <form method="post">
+            {%csrf_token%}
+            {{form.as_p}}
+            <button type="submit" class="btn btn-sm btn-success">Next</button>
+        </form>
+    </div>
+</div>
+{%endblock main%}

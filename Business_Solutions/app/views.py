@@ -107,15 +107,14 @@ class SalesListView(TemplateView):
     template_name = 'inventory/sales/salesList.html'
 
 
-# --------------------------------------------------------------- Product Line up view
+# --------------------------------------------------------------- General user create view
 class ClientUserView(SuperuserRequiredMixin, CreateView):
     model = GeneralUser
     form_class = GeneralUserForm
     template_name = 'inventory/sales/createClientUser.html'
-    success_url = reverse_lazy('product-lineup',)
 
     def get_success_url(self):
-        return reverse('product-lineup',kwargs={'pk': self.object.email})
+        return reverse('invoice-list',kwargs={'pk': self.object.email})
     
     def form_valid(self, form):
         self.first_name = form.cleaned_data['first_name']
@@ -124,35 +123,44 @@ class ClientUserView(SuperuserRequiredMixin, CreateView):
         self.phone = form.cleaned_data['phone']
 
         if self.email:
-            user = User.objects.get(email=self.email)
+            user = User.objects.filter(email=self.email).first()
             if user:
-                return redirect('product-lineup', pk=self.email)
-            general_user = GeneralUser.objects.filter(email=self.email, phone=self.phone).exists()
-            if general_user:
-                return redirect('product-lineup', pk=self.email)
+                return redirect('invoice-list', pk=self.email)
         return super().form_valid(form)
     
+    def form_invalid(self, form):
+        email = form.data['email']
+        general_user = GeneralUser.objects.filter(email=email).first()
+        if general_user:
+            return redirect('invoice-list', pk=form.data['email'])
+        return super().form_invalid(form)
+    
     
     
 
-
-class ProductLineUpView(SuperuserRequiredMixin, ListView):
+# --------------------------------------------------------------- invoice list
+class InvoiceListView(SuperuserRequiredMixin, ListView):
     model = ProductLineUp
-    context_object_name = 'Product_list'
-    template_name = 'inventory/sales/productLineUp.html'
+    context_object_name = 'product_list'
+    template_name = 'inventory/sales/invoiceList.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
         print(pk)
         if pk:
-            buyer = User.objects.get(email=pk)
-            if buyer:
-                context['buyer'] = buyer
-            else:
-                buyer = GeneralUser.objects.get(email=pk)
-                context['buyer'] = buyer
+            if User.objects.filter(email=pk).exists():
+                context['buyer'] = User.objects.filter(email=pk).first()
+            if GeneralUser.objects.filter(email=pk).exists():
+                context['buyer'] = GeneralUser.objects.filter(email=pk).first()
         return context
+
+
+# ---------------------------------------------------------------- invoice add item
+class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
+    model = ProductLineUp
+    form_class = ProductLineUpForm
+    template_name = 'inventory/sales/invoiceAddItem.html'
     
     
 
