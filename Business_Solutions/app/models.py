@@ -25,6 +25,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
@@ -199,4 +200,36 @@ class Purchase(models.Model):
         return self.model
 
 
+# =========================================================== Generel User
+class GeneralUser(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.EmailField(max_length=255, unique=True,null=True, blank=True)
+    phone = models.CharField(max_length=20, unique=True)
 
+    class Meta:
+        ordering = ['-id']
+    
+    def __str__(self):
+        return f"{self.id}"
+
+
+# ============================================================ Product Line up Model
+class ProductLineUp(models.Model):
+    token = models.CharField(max_length=100)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE),
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.token
+
+
+# ============================================================ Sales Model
+class Sales(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
+    general_user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE, null=True, blank=True)
+    invoice_list = models.ForeignKey(ProductLineUp, on_delete=models.CASCADE)
+    sales_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.id}"

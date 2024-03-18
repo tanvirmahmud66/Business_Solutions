@@ -7,7 +7,10 @@ from .models import (
     Inventory, 
     Supplier,
     Transaction,
-    Purchase
+    Purchase, 
+    GeneralUser, 
+    ProductLineUp, 
+    Sales
 )
 # Register your models here.
 
@@ -50,3 +53,6 @@ admin.site.register(Inventory, InventoryAdminView)
 admin.site.register(Supplier, SupplierAdminView)
 admin.site.register(Transaction,TransactionAdminView)
 admin.site.register(Purchase, PurchaseAdminView)
+admin.site.register(GeneralUser)
+admin.site.register(ProductLineUp)
+admin.site.register(Sales)

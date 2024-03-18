@@ -8,7 +8,10 @@ from .models import (
     Inventory, 
     Product, 
     Supplier,
-    Purchase
+    Purchase,
+    GeneralUser,
+    ProductLineUp,
+    Sales
 )
 
 # ---------------------------------------Admin create Form
@@ -86,3 +89,19 @@ class PurchaseForm(forms.ModelForm):
     
 
 
+class GeneralUserForm(forms.ModelForm):
+    class Meta:
+        model = GeneralUser
+        fields = '__all__'
+
+
+class ProductLineUpForm(forms.ModelForm):
+    class Meta:
+        model = ProductLineUp
+        fields = '__all__'
+
+
+class SalesForm(forms.ModelForm):
+    class Meta:
+        model = Sales
+        fields = '__all__'

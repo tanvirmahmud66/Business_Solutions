@@ -3,8 +3,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
+from django.shortcuts import redirect
 from django.forms import BaseModelForm
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
 from django.db.models import Q
@@ -17,6 +19,7 @@ from django.views.generic import (
     UpdateView
 )
 from .models import (
+    User,
     Categories, 
     Brand, 
     Inventory, 
@@ -24,6 +27,9 @@ from .models import (
     Supplier,
     Purchase,
     Transaction,
+    GeneralUser, 
+    ProductLineUp,
+    Sales
 )
 from .forms import (
     AdminCreateForm,
@@ -34,6 +40,9 @@ from .forms import (
     Productform, 
     SupplierForm,
     PurchaseForm,
+    GeneralUserForm,
+    ProductLineUpForm,
+    SalesForm
 )
 
 # =========================================AUTHENTICATION SECTION===================================
@@ -96,6 +105,58 @@ class InventoryView(SuperuserRequiredMixin,ListView):
 # --------------------------------------------------------------- Sales List View
 class SalesListView(TemplateView):
     template_name = 'inventory/sales/salesList.html'
+
+
+# --------------------------------------------------------------- Product Line up view
+class ClientUserView(SuperuserRequiredMixin, CreateView):
+    model = GeneralUser
+    form_class = GeneralUserForm
+    template_name = 'inventory/sales/createClientUser.html'
+    success_url = reverse_lazy('product-lineup',)
+
+    def get_success_url(self):
+        return reverse('product-lineup',kwargs={'pk': self.object.email})
+    
+    def form_valid(self, form):
+        self.first_name = form.cleaned_data['first_name']
+        self.last_name = form.cleaned_data['last_name']
+        self.email = form.cleaned_data['email']
+        self.phone = form.cleaned_data['phone']
+
+        if self.email:
+            user = User.objects.get(email=self.email)
+            if user:
+                return redirect('product-lineup', pk=self.email)
+            general_user = GeneralUser.objects.filter(email=self.email, phone=self.phone).exists()
+            if general_user:
+                return redirect('product-lineup', pk=self.email)
+        return super().form_valid(form)
+    
+    
+    
+
+
+class ProductLineUpView(SuperuserRequiredMixin, ListView):
+    model = ProductLineUp
+    context_object_name = 'Product_list'
+    template_name = 'inventory/sales/productLineUp.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        print(pk)
+        if pk:
+            buyer = User.objects.get(email=pk)
+            if buyer:
+                context['buyer'] = buyer
+            else:
+                buyer = GeneralUser.objects.get(email=pk)
+                context['buyer'] = buyer
+        return context
+    
+    
+
+
 
 
 # ---------------------------------------------------------------Inventory list view

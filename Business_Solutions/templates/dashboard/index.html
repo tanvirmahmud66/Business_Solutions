@@ -1,17 +1,18 @@
 {% extends "Layout.html" %}
 {% load static %}
 
-<!-- titile -->
+{%block title%}Dashboard | Amar Shop{%endblock title%}
+
 {%block link%}
-    <title>Dashboard | Amar Shop</title>
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
 {%endblock link%}
 
 
 <!-- main body -->
 {%block main%}
 
-<h1>
+<div class="card height-100">
     Dashboard
-</h1>
+</div>
 
 {%endblock main%}

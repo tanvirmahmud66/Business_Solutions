@@ -12,6 +12,8 @@ from .views import (
 
     InventoryView,
     SalesListView,
+    ClientUserView,
+    ProductLineUpView,
 
     InventoryListView,
     InventoryDetailsView,
@@ -58,6 +60,8 @@ urlpatterns = [
 
     path('inventory/', InventoryView.as_view(), name='inventory'),
     path('inventory/sales-list/',SalesListView.as_view(),name='sales-list'),
+    path('inventory/sales/new-sale/',ClientUserView.as_view(),name='new-sale'),
+    path('inventory/sales/new-sale/<str:pk>/product-list/', ProductLineUpView.as_view(),name='product-lineup'),
 
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
