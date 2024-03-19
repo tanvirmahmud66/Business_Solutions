@@ -11,10 +11,11 @@
 {%block main%}
 <div class="inventory">
     <div class="card height-100">
+        <div class="card-header text-center fw-bold fs-4">Invoice List</div>
         <div class="m-3">
-            <div>Name: <span class="fw-bold">{{buyer.first_name}} {{buyer.last_name}}</span></div>
-            <div>Email: <span class="fw-bold">{{buyer.email}}</span></div>
-            <div>Phone: <span class="fw-bold">{{buyer.phone}}</span></div>
+            <div class="mb-2 fw-bold">Name: <span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
+            <div class="mb-2 fw-bold">Email: <span class="fw-normal">{{buyer.email}}</span></div>
+            <div class="mb-1 fw-bold">Phone: <span class="fw-normal">{{buyer.phone}}</span></div>
         </div>
         <div class="card-body p-0 ps-3 pe-3">
             <table class="table table-bordered border-warning">
@@ -30,6 +31,9 @@
                     {%for product in product_list%}
                         <tr>
                             <td>{{product}}</td>
+                            <td class="text-center">{{product.quantity}}</td>
+                            <td class="text-center">{{product.product.unit_price}}</td>
+                            <td class="text-center text-success">{{product.subtotal}}</td>
                         </tr>
                     {%endfor%}
                 </tbody>

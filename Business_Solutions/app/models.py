@@ -211,12 +211,13 @@ class GeneralUser(models.Model):
 
 # ============================================================ Product Line up Model
 class ProductLineUp(models.Model):
-    token = models.CharField(max_length=100)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE),
+    token = models.CharField(max_length=100, blank=True)
+    product = models.ForeignKey(Inventory, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField()
+    subtotal = models.PositiveBigIntegerField(null=True,blank=True)
 
     def __str__(self):
-        return self.token
+        return self.product.product.model
 
 
 # ============================================================ Sales Model

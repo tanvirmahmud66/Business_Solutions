@@ -109,3 +109,6 @@ urlpatterns = [
     path('manage-store/', StoreManageView.as_view(), name='manage'),
 
 ]
+
+
+

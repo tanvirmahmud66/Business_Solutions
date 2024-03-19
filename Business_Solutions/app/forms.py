@@ -98,7 +98,7 @@ class GeneralUserForm(forms.ModelForm):
 class ProductLineUpForm(forms.ModelForm):
     class Meta:
         model = ProductLineUp
-        fields = '__all__'
+        fields = ['product','quantity']
 
 
 class SalesForm(forms.ModelForm):

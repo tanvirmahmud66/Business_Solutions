@@ -161,6 +161,17 @@ class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
     model = ProductLineUp
     form_class = ProductLineUpForm
     template_name = 'inventory/sales/invoiceAddItem.html'
+
+    def get_success_url(self):
+        return reverse('invoice-list',kwargs={'pk': self.kwargs.get('pk', None)})
+    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        token_param = self.kwargs.get('pk', None)
+        obj.token = token_param
+        obj.subtotal = obj.quantity * obj.product.unit_price
+        obj.save()
+        return super().form_valid(form)
     
     
 

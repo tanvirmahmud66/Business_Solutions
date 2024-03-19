@@ -11,11 +11,13 @@
 {%block main%}
 <div class="inventory">
     <div class="card height-100">
+        <div class="card-body">
         <form method="post">
             {%csrf_token%}
             {{form.as_p}}
             <button type="submit" class="btn btn-sm btn-success">Next</button>
         </form>
+        </div>
     </div>
 </div>
 {%endblock main%}
