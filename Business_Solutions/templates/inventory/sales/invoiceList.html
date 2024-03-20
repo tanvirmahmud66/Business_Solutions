@@ -13,7 +13,7 @@
     <div class="card height-100">
         <div class="card-header text-center fw-bold fs-4">Invoice List</div>
         <div class="m-3">
-            <div class="mb-2 fw-bold">Name: <span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
+            <div class="mb-2 fs-4 fw-bold">Name: <span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
             <div class="mb-2 fw-bold">Email: <span class="fw-normal">{{buyer.email}}</span></div>
             <div class="mb-1 fw-bold">Phone: <span class="fw-normal">{{buyer.phone}}</span></div>
         </div>
@@ -22,24 +22,47 @@
                 <thead class="table-secondary sticky-top">
                     <tr>
                         <th scope="col">Product</th>
+                        <th scope="col" class="text-center">Unit price (BDT)</th>
                         <th scope="col" class="text-center">Quantity</th>
-                        <th scope="col" class="text-center">Unit price</th>
-                        <th scope="col" class="text-center">Total Price</th>
+                        <th scope="col" class="text-center">Total Price (BDT)</th>
+                        <th scope="col" class="text-center">Option</th>
                     </tr>
                 </thead>
                 <tbody>
                     {%for product in product_list%}
                         <tr>
                             <td>{{product}}</td>
-                            <td class="text-center">{{product.quantity}}</td>
                             <td class="text-center">{{product.product.unit_price}}</td>
+                            <td class="text-center">{{product.quantity}}</td>
                             <td class="text-center text-success">{{product.subtotal}}</td>
+                            <td class="text-center">
+                                <a href="{%url 'invoice-remove-item' buyer.email product.id%}" class="btn btn-sm btn-danger">Remove</a>
+                            </td>
                         </tr>
                     {%endfor%}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="text-center fw-bold">Total Amount</td>
+                            <td class="text-center text-success fw-bold">
+                                {%if total_amount %}
+                                    {{total_amount}}
+                                {%else%}
+                                    0
+                                {%endif%}
+                            </td>
+                            <td class="text-center">
+                                <a href="{%url 'invoice-add-item' buyer.email%}" class="btn btn-sm btn-warning">Add Item</a>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
-            <a href="{%url 'invoice-add-item' buyer.email%}" class="btn btn-sm btn-warning">Add Item</a>
+            <div class="text-end">
+                <button class="btn btn-success">Make Payment</button>
+            </div>
         </div>
     </div>
+
 </div>
+
 {%endblock main%}

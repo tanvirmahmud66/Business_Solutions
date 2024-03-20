@@ -1,7 +1,7 @@
 {% extends "Layout.html" %}
 {% load static %}
 
-{%block title%} Sales List | Amar Shop{%endblock title%}
+{%block title%} Add Sales Item | Amar Shop{%endblock title%}
 
 {%block link%}
     <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
@@ -10,13 +10,20 @@
 <!-- main body -->
 {%block main%}
 <div class="inventory">
-    <div class="card height-100">
-        <div class="card-body">
-        <form method="post">
-            {%csrf_token%}
-            {{form.as_p}}
-            <button type="submit" class="btn btn-sm btn-success">Next</button>
-        </form>
+    <div class="card height-100 d-flex justify-content-center align-items-center">
+        <div class="card shadow-lg">
+            <div class="card-header text-center text-success fs-4 fw-bold">Add Invoice Item</div>
+            <div class="card-body">
+                <form method="post">
+                    {%csrf_token%}
+                    {{form.as_p}}
+                    <div>
+                        <a href="{%url 'invoice-list' email%}" class="btn btn-sm btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-sm btn-success">Add</button>
+                    </div>
+                    
+                </form>
+            </div>
         </div>
     </div>
 </div>

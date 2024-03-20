@@ -215,6 +215,7 @@ class ProductLineUp(models.Model):
     product = models.ForeignKey(Inventory, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField()
     subtotal = models.PositiveBigIntegerField(null=True,blank=True)
+    sale_confirm = models.BooleanField(default=False)
 
     def __str__(self):
         return self.product.product.model

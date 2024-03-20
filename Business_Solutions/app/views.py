@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
 from django.db.models import Q
+from django.db.models import Sum
 from django.views.generic import (
     FormView,
     TemplateView, 
@@ -141,11 +142,14 @@ class ClientUserView(SuperuserRequiredMixin, CreateView):
 # --------------------------------------------------------------- invoice list
 class InvoiceListView(SuperuserRequiredMixin, ListView):
     model = ProductLineUp
-    context_object_name = 'product_list'
     template_name = 'inventory/sales/invoiceList.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        product_list = ProductLineUp.objects.filter(token = self.kwargs.get('pk'), sale_confirm=False)
+        context['product_list'] = product_list
+        total_amount = product_list.aggregate(total_amount=Sum('subtotal'))['total_amount']
+        context['total_amount'] = total_amount
         pk = self.kwargs.get('pk')
         print(pk)
         if pk:
@@ -165,6 +169,11 @@ class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('invoice-list',kwargs={'pk': self.kwargs.get('pk', None)})
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.kwargs.get('pk',None)
+        return context
+    
     def form_valid(self, form):
         obj = form.save(commit=False)
         token_param = self.kwargs.get('pk', None)
@@ -172,8 +181,16 @@ class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
         obj.subtotal = obj.quantity * obj.product.unit_price
         obj.save()
         return super().form_valid(form)
-    
-    
+
+
+#----------------------------------------------------------------- invoice remove item
+class InvoiceRemoveItem(SuperuserRequiredMixin, DeleteView):
+    model = ProductLineUp
+    context_object_name = 'invoiceItem'
+    template_name = 'inventory/sales/invoiceRemoveItem.html'
+
+    def get_success_url(self):
+        return reverse('invoice-list',kwargs={'pk': self.kwargs.get('email', None)})   
 
 
 
