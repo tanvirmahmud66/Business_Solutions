@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
 from django.db.models import Q
@@ -181,6 +182,16 @@ class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
         obj.subtotal = obj.quantity * obj.product.unit_price
         obj.save()
         return super().form_valid(form)
+    
+def get_filtered_products(request):
+    category_id = request.GET.get('category_id')
+    brand_id = request.GET.get('brand_id')
+    category = Categories.objects.get(id=category_id)
+    brand = Brand.objects.get(id=brand_id)
+    print(category_id, brand_id)
+    products = Inventory.objects.filter(product__category=category, product__brand=brand).values('id','product__model')
+    print(products)
+    return JsonResponse({'products': list(products)})
 
 
 #----------------------------------------------------------------- invoice remove item

@@ -11,17 +11,24 @@
 {%block main%}
 <div class="inventory">
     <div class="card height-100">
-        <div class="card-header text-center fw-bold fs-4">Invoice List</div>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <a href="{%url 'new-sale'%}" class="btn-back">
+                <img src="{%static 'icons/inventory/back.png'%}" width="20" alt=""/>
+            </a>
+            <div class="fs-4 fw-bold">Invoice</div>
+            <a href="{%url 'new-sale'%}" class="ms-2 btn btn-sm btn-success">Make Payment</a>
+        </div>
         <div class="m-3">
             <div class="mb-2 fs-4 fw-bold">Name: <span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
             <div class="mb-2 fw-bold">Email: <span class="fw-normal">{{buyer.email}}</span></div>
             <div class="mb-1 fw-bold">Phone: <span class="fw-normal">{{buyer.phone}}</span></div>
         </div>
         <div class="card-body p-0 ps-3 pe-3">
-            <table class="table table-bordered border-warning">
-                <thead class="table-secondary sticky-top">
+            <table class="table">
+                <thead class="sticky-top">
                     <tr>
                         <th scope="col">Product</th>
+                        <th scope="col" class="text-center">Picture</th>
                         <th scope="col" class="text-center">Unit price (BDT)</th>
                         <th scope="col" class="text-center">Quantity</th>
                         <th scope="col" class="text-center">Total Price (BDT)</th>
@@ -32,6 +39,15 @@
                     {%for product in product_list%}
                         <tr>
                             <td>{{product}}</td>
+                            <td>
+                                <div class="overflow-hidden d-flex justify-content-center align-items-center">
+                                    {%if product.product.product.productImg %}
+                                    <img src="{{ product.product.product.productImg.url }}" alt="Product Image" width="60">
+                                    {%else%}
+                                    <img src="{% static 'media/default_images/default_product_image.png' %}" alt="{{ product.model }}">
+                                    {%endif%}
+                                </div>
+                            </td>
                             <td class="text-center">{{product.product.unit_price}}</td>
                             <td class="text-center">{{product.quantity}}</td>
                             <td class="text-center text-success">{{product.subtotal}}</td>
@@ -40,10 +56,8 @@
                             </td>
                         </tr>
                     {%endfor%}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td class="text-center fw-bold">Total Amount</td>
+                        <tr class="table-success">
+                            <td colspan="4" class="fw-bold">Total Amount</td>
                             <td class="text-center text-success fw-bold">
                                 {%if total_amount %}
                                     {{total_amount}}
@@ -57,9 +71,6 @@
                         </tr>
                 </tbody>
             </table>
-            <div class="text-end">
-                <button class="btn btn-success">Make Payment</button>
-            </div>
         </div>
     </div>
 

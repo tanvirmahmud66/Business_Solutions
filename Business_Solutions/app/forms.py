@@ -96,9 +96,17 @@ class GeneralUserForm(forms.ModelForm):
 
 
 class ProductLineUpForm(forms.ModelForm):
+    category = forms.ModelChoiceField(queryset=Categories.objects.all(), required=False)
+    brand = forms.ModelChoiceField(queryset=Brand.objects.all(), required=False)
+
     class Meta:
         model = ProductLineUp
         fields = ['product','quantity']
+
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['product'].queryset = Inventory.objects.all()
 
 
 class SalesForm(forms.ModelForm):
