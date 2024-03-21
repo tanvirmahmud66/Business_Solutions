@@ -53,7 +53,8 @@ class InvoiceAdminView(admin.ModelAdmin):
     list_display = ('id','token','product','quantity','subtotal','sale_confirm')
 
 
-
+class SalesAdminView(admin.ModelAdmin):
+    list_display = ('id','user','general_user','amount','product_quantity','sales_date')
 
 
 admin.site.register(User, UserAdminView)
@@ -66,4 +67,4 @@ admin.site.register(Transaction,TransactionAdminView)
 admin.site.register(Purchase, PurchaseAdminView)
 admin.site.register(GeneralUser, GeneralUserAdminView)
 admin.site.register(ProductLineUp,InvoiceAdminView)
-admin.site.register(Sales)
+admin.site.register(Sales, SalesAdminView)

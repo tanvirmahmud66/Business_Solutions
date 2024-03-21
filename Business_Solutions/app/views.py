@@ -8,6 +8,7 @@ from django.forms import BaseModelForm
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
+from datetime import datetime
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
 from django.db.models import Q
@@ -212,10 +213,48 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
     form_class = TransactionForm
     template_name = 'inventory/sales/salesPayment.html'
 
+    def get_success_url(self):
+        return reverse('sales-list')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['email'] = self.kwargs.get('pk', None)
         return context
+    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        email = self.kwargs.get('pk',None)
+        obj.transaction_type = "IN"
+        obj.reference = email
+        obj.transaction_date = datetime.now()
+        obj.save()
+        invoice_list = ProductLineUp.objects.filter(token=email, sale_confirm=False)
+        self.invoice_list_count = invoice_list.count()
+        for each in invoice_list:
+            each.sale_confirm = True
+            inventory = Inventory.objects.get(product=each.product.product)
+            inventory.quantity -= each.quantity
+            inventory.save()
+            each.save()
+        user = User.objects.filter(email=email).first()
+        if user:
+            new_sale = Sales.objects.create(
+                user=user,
+                amount=obj.amount,
+                product_quantity=self.invoice_list_count,
+                sales_date = obj.transaction_date
+            )
+            new_sale.save()
+        else:
+            general_user = GeneralUser.objects.get(email=email)
+            sale = Sales.objects.create(
+                general_user=general_user,
+                amount=obj.amount,
+                product_quantity=self.invoice_list_count,
+                sales_date = obj.transaction_date
+            )
+            sale.save()
+        return super().form_valid(form)
 
 
 

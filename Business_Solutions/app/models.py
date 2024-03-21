@@ -222,7 +222,8 @@ class ProductLineUp(models.Model):
 class Sales(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True, blank=True)
     general_user = models.ForeignKey(GeneralUser, on_delete=models.CASCADE, null=True, blank=True)
-    invoice_list = models.ForeignKey(ProductLineUp, on_delete=models.CASCADE)
+    amount = models.IntegerField(null=True,blank=True)
+    product_quantity = models.BigIntegerField(null=True,blank=True)
     sales_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
