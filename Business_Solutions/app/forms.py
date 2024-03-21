@@ -6,6 +6,7 @@ from .models import (
     Categories,
     Brand, 
     Inventory, 
+    Transaction,
     Product, 
     Supplier,
     Purchase,
@@ -37,19 +38,21 @@ class AdminCreateForm(UserCreationForm):
 
 
 
-# ------------------------ Category Form
+# -------------------------------------- Category Form
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Categories
         fields = '__all__'
 
 
+# --------------------------------------- Brand Form
 class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand
         fields = '__all__'
 
 
+# --------------------------------------- Inventory Form
 class InventoryForm(forms.ModelForm):
     class Meta:
         model = Inventory
@@ -60,6 +63,8 @@ class InventoryPriceSetForm(forms.ModelForm):
         model = Inventory
         fields = ['unit_price']
 
+
+# --------------------------------------- Product Form
 class Productform(forms.ModelForm):
     class Meta:
         model = Product
@@ -70,6 +75,7 @@ class Productform(forms.ModelForm):
         }
 
 
+# ---------------------------------------- Supplier Form
 class SupplierForm(forms.ModelForm):
     class Meta:
         model = Supplier
@@ -79,6 +85,7 @@ class SupplierForm(forms.ModelForm):
         }
 
 
+# ---------------------------------------- Purchase Form
 class PurchaseForm(forms.ModelForm):
     class Meta:
         model = Purchase
@@ -88,13 +95,14 @@ class PurchaseForm(forms.ModelForm):
         }
     
 
-
+# ------------------------------------------ General Form
 class GeneralUserForm(forms.ModelForm):
     class Meta:
         model = GeneralUser
         fields = '__all__'
 
 
+# ------------------------------------------ Product Line up form
 class ProductLineUpForm(forms.ModelForm):
     category = forms.ModelChoiceField(queryset=Categories.objects.all(), required=False)
     brand = forms.ModelChoiceField(queryset=Brand.objects.all(), required=False)
@@ -109,7 +117,32 @@ class ProductLineUpForm(forms.ModelForm):
         self.fields['product'].queryset = Inventory.objects.all()
 
 
+# --------------------------------------------- Sales Form
 class SalesForm(forms.ModelForm):
     class Meta:
         model = Sales
         fields = '__all__'
+
+
+# ---------------------------------------------- Transaction Form
+class TransactionForm(forms.ModelForm):
+
+    PAYMENT_METHOD = (
+        ('Cash', 'Cash'),
+        ('Credit Card', 'Credit card'),
+        ('Master Card', 'Master Card'),
+        ('Bank Cheque','Bank cheque'),
+        ('Bkash','Bkash'),
+        ('Sure Cash','Sure Cash'),
+        ('DBBL Mobile','DBBL Mobile'),
+        ('DBBL Card','DBBL Card'),
+        ('Nagad','Nagad'),
+        ('UCash', 'UCash'),
+        ('Payoneer','Payoneer'),
+    )
+
+    payment_method = forms.ChoiceField(choices=PAYMENT_METHOD)
+
+    class Meta:
+        model = Transaction
+        fields = ['payment_method','amount']

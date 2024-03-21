@@ -140,10 +140,6 @@ class Inventory(models.Model):
 
 #============================================================================== Transaction Model
 class Transaction(models.Model):
-    # TRANSACTION_TYPE = [
-    #     ('IN', 'IN'),
-    #     ('OUT','OUT')
-    # ]
     product = models.ForeignKey(Product, on_delete=models.CASCADE,null=True,blank=True)
     transaction_type = models.CharField(max_length=5)
     payment_method = models.CharField(max_length=50,)
@@ -152,7 +148,7 @@ class Transaction(models.Model):
     transaction_date = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.id
+        return f"{self.id}"
 
 
 #============================================================================ Purchase Model

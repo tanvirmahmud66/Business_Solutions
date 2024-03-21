@@ -17,6 +17,7 @@ from .views import (
     InvoiceAddItem,
     get_filtered_products,
     InvoiceRemoveItem,
+    SalesPayment,
 
     InventoryListView,
     InventoryDetailsView,
@@ -68,6 +69,7 @@ urlpatterns = [
     path('inventory/sales/new-sale/<str:pk>/product-list/add-item/',InvoiceAddItem.as_view(),name='invoice-add-item'),
     path('get_filtered_products/', get_filtered_products, name='get_filtered_products'),
     path('inventory/sales/new-sale/<str:email>/product-list/<int:pk>/remove-item/',InvoiceRemoveItem.as_view(),name='invoice-remove-item'),
+    path('inventory/sales/new-sale/<str:pk>/payment/',SalesPayment.as_view(),name='sales-payment'),
 
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),

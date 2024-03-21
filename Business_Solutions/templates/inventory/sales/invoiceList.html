@@ -1,7 +1,7 @@
 {% extends "Layout.html" %}
 {% load static %}
 
-{%block title%} Sales List | Amar Shop{%endblock title%}
+{%block title%} Invoice | Amar Shop{%endblock title%}
 
 {%block link%}
     <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
@@ -16,16 +16,18 @@
                 <img src="{%static 'icons/inventory/back.png'%}" width="20" alt=""/>
             </a>
             <div class="fs-4 fw-bold">Invoice</div>
-            <a href="{%url 'new-sale'%}" class="ms-2 btn btn-sm btn-success">Make Payment</a>
+            <a href="{%url 'sales-payment' buyer.email%}" class="ms-2 btn btn-sm btn-success">Make Payment</a>
         </div>
-        <div class="m-3">
-            <div class="mb-2 fs-4 fw-bold">Name: <span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
-            <div class="mb-2 fw-bold">Email: <span class="fw-normal">{{buyer.email}}</span></div>
-            <div class="mb-1 fw-bold">Phone: <span class="fw-normal">{{buyer.phone}}</span></div>
+        <div class="m-3 mb-4 card border border-2 border-info">
+            <div class="card-body">
+                <div class="mb-2 fs-4"><span class="fw-normal">{{buyer.first_name}} {{buyer.last_name}}</span></div>
+                <div class="mb-2 fw-bold">Email: <span class="fw-normal">{{buyer.email}}</span></div>
+                <div class="fw-bold">Phone: <span class="fw-normal">{{buyer.phone}}</span></div>
+            </div>
         </div>
-        <div class="card-body p-0 ps-3 pe-3">
+        <div class="card-body p-0 ps-3 pe-3 table-container">
             <table class="table">
-                <thead class="sticky-top">
+                <thead class="sticky-top table-secondary">
                     <tr>
                         <th scope="col">Product</th>
                         <th scope="col" class="text-center">Picture</th>
@@ -35,7 +37,7 @@
                         <th scope="col" class="text-center">Option</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="">
                     {%for product in product_list%}
                         <tr>
                             <td>{{product}}</td>
@@ -56,20 +58,22 @@
                             </td>
                         </tr>
                     {%endfor%}
-                        <tr class="table-success">
-                            <td colspan="4" class="fw-bold">Total Amount</td>
-                            <td class="text-center text-success fw-bold">
-                                {%if total_amount %}
-                                    {{total_amount}}
-                                {%else%}
-                                    0
-                                {%endif%}
-                            </td>
-                            <td class="text-center">
-                                <a href="{%url 'invoice-add-item' buyer.email%}" class="btn btn-sm btn-warning">Add Item</a>
-                            </td>
-                        </tr>
                 </tbody>
+                <tfoot class="sticky-bottom table-success">
+                    <tr>
+                        <td colspan="4" class="fw-bold">Total Amount</td>
+                        <td class="text-center text-success fw-bold">
+                            {%if total_amount %}
+                                {{total_amount}}
+                            {%else%}
+                                0
+                            {%endif%}
+                        </td>
+                        <td class="text-center">
+                            <a href="{%url 'invoice-add-item' buyer.email%}" class="btn btn-sm btn-warning">Add Item</a>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

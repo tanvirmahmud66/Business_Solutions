@@ -44,6 +44,7 @@ from .forms import (
     PurchaseForm,
     GeneralUserForm,
     ProductLineUpForm,
+    TransactionForm,
     SalesForm
 )
 
@@ -183,6 +184,7 @@ class InvoiceAddItem(SuperuserRequiredMixin, CreateView):
         obj.save()
         return super().form_valid(form)
     
+
 def get_filtered_products(request):
     category_id = request.GET.get('category_id')
     brand_id = request.GET.get('brand_id')
@@ -203,6 +205,17 @@ class InvoiceRemoveItem(SuperuserRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse('invoice-list',kwargs={'pk': self.kwargs.get('email', None)})   
 
+
+# --------------------------------------------------------------- Sales payment
+class SalesPayment(SuperuserRequiredMixin, CreateView):
+    model = Transaction
+    form_class = TransactionForm
+    template_name = 'inventory/sales/salesPayment.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.kwargs.get('pk', None)
+        return context
 
 
 

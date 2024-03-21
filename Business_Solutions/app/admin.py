@@ -45,6 +45,17 @@ class PurchaseAdminView(admin.ModelAdmin):
     list_display = ('id','category','brand','model','quantity','unit_cost','supplier','transaction_type','payment_method','paid_ammount','reference','due_amount','purchase_date')
 
 
+class GeneralUserAdminView(admin.ModelAdmin):
+    list_display = ('id','first_name','last_name','email','phone')
+
+
+class InvoiceAdminView(admin.ModelAdmin):
+    list_display = ('id','token','product','quantity','subtotal','sale_confirm')
+
+
+
+
+
 admin.site.register(User, UserAdminView)
 admin.site.register(Categories, CategroyAdminView)
 admin.site.register(Brand, BrandAdminView)
@@ -53,6 +64,6 @@ admin.site.register(Inventory, InventoryAdminView)
 admin.site.register(Supplier, SupplierAdminView)
 admin.site.register(Transaction,TransactionAdminView)
 admin.site.register(Purchase, PurchaseAdminView)
-admin.site.register(GeneralUser)
-admin.site.register(ProductLineUp)
+admin.site.register(GeneralUser, GeneralUserAdminView)
+admin.site.register(ProductLineUp,InvoiceAdminView)
 admin.site.register(Sales)

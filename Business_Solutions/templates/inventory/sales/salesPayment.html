@@ -1,0 +1,30 @@
+{% extends "Layout.html" %}
+{% load static %}
+
+{%block title%} Sales Payment | Amar Shop{%endblock title%}
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
+
+<!-- main body -->
+{%block main%}
+<div class="inventory">
+    <div class="card height-100">
+        <div class="card">
+            <div class="card-header">Payment</div>
+            <div class="card-body">
+                <form method="post">
+                    {%csrf_token%}
+                    {{form.as_p}}
+                    <div>
+                        <a href="{%url 'invoice-list' email%}" class="btn btn-sm btn-outline-secondary">Cancel</a>
+                        <button class="btn btn-sm btn-success">Confirm Sale</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock main%}
