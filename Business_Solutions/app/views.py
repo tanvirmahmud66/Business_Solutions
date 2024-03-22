@@ -107,8 +107,18 @@ class InventoryView(SuperuserRequiredMixin,ListView):
 
 
 # --------------------------------------------------------------- Sales List View
-class SalesListView(TemplateView):
+class SalesListView(SuperuserRequiredMixin, ListView):
+    model = Sales
+    context_object_name = 'Sales'
     template_name = 'inventory/sales/salesList.html'
+
+
+
+# --------------------------------------------------------------- Sale Details View
+class SaleDetailsView(SuperuserRequiredMixin, DetailView):
+    model = Sales
+    context_object_name = "sale"
+    template_name = 'inventory/sales/saleDetails.html'
 
 
 # --------------------------------------------------------------- General user create view
@@ -229,8 +239,9 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
         obj.transaction_date = datetime.now()
         obj.save()
         invoice_list = ProductLineUp.objects.filter(token=email, sale_confirm=False)
-        self.invoice_list_count = invoice_list.count()
+        self.total_product=0
         for each in invoice_list:
+            self.total_product += each.quantity
             each.sale_confirm = True
             inventory = Inventory.objects.get(product=each.product.product)
             inventory.quantity -= each.quantity
@@ -241,7 +252,7 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
             new_sale = Sales.objects.create(
                 user=user,
                 amount=obj.amount,
-                product_quantity=self.invoice_list_count,
+                product_quantity=self.total_product,
                 sales_date = obj.transaction_date
             )
             new_sale.save()
@@ -250,7 +261,7 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
             sale = Sales.objects.create(
                 general_user=general_user,
                 amount=obj.amount,
-                product_quantity=self.invoice_list_count,
+                product_quantity=self.total_product,
                 sales_date = obj.transaction_date
             )
             sale.save()

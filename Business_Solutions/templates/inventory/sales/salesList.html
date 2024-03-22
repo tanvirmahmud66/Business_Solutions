@@ -46,8 +46,39 @@
                         <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>
                       </div>                      
                 </form>
-                
             </div>
+        </div>
+        <div class="card-body p-0 ps-3 pe-3 overflow-scroll">
+          <table class="table table-bordered border-warning">
+            <thead class="table-secondary sticky-top">
+              <tr>
+                <th scope="col">Customer Name</th>
+                <th scope="col" class="text-center">Product Quantity</th>
+                <th scope="col" class="text-center">Payment amount</th>
+                <th scope="col" class="text-center">Date of Sale</th>
+                <th scope="col" class="text-center">Time</th>
+                <th scope="col" class="text-center">Option</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%for sale in Sales%}
+                <tr>
+                  {%if sale.user%}
+                    <td>{{sale.user.first_name}} {{sale.user.last_name}}</td>
+                  {%else%}
+                    <td>{{sale.general_user.first_name}} {{sale.general_user.last_name}}</td>
+                  {%endif%}
+                  <td class="text-center">{{sale.product_quantity}}</td>
+                  <td class="text-center fw-bold text-success">{{sale.amount}}</td>
+                  <td class="text-center">{{sale.sales_date.date}}</td>
+                  <td class="text-center text-primary">{{sale.sales_date.time}}</td>
+                  <td class="text-center">
+                    <a href="{%url 'sale-details' sale.id%}" class="btn btn-sm btn-outline-secondary">Details</a>
+                  </td>
+                </tr>
+              {%endfor%}
+            </tbody>
+          </table>
         </div>
     </div>
 </div>

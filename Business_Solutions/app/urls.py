@@ -11,7 +11,9 @@ from .views import (
     DashboardView,
 
     InventoryView,
+
     SalesListView,
+    SaleDetailsView,
     ClientUserView,
     InvoiceListView,
     InvoiceAddItem,
@@ -65,10 +67,11 @@ urlpatterns = [
     path('inventory/', InventoryView.as_view(), name='inventory'),
     path('inventory/sales-list/',SalesListView.as_view(),name='sales-list'),
     path('inventory/sales/new-sale/',ClientUserView.as_view(),name='new-sale'),
-    path('inventory/sales/new-sale/<str:pk>/product-list/', InvoiceListView.as_view(),name='invoice-list'),
-    path('inventory/sales/new-sale/<str:pk>/product-list/add-item/',InvoiceAddItem.as_view(),name='invoice-add-item'),
+    path('inventory/sales/<int:pk>/sale-details/',SaleDetailsView.as_view(),name='sale-details'),
+    path('inventory/sales/new-sale/<str:pk>/invoice/', InvoiceListView.as_view(),name='invoice-list'),
+    path('inventory/sales/new-sale/<str:pk>/invoice/add-item/',InvoiceAddItem.as_view(),name='invoice-add-item'),
     path('get_filtered_products/', get_filtered_products, name='get_filtered_products'),
-    path('inventory/sales/new-sale/<str:email>/product-list/<int:pk>/remove-item/',InvoiceRemoveItem.as_view(),name='invoice-remove-item'),
+    path('inventory/sales/new-sale/<str:email>/invoice/<int:pk>/remove-item/',InvoiceRemoveItem.as_view(),name='invoice-remove-item'),
     path('inventory/sales/new-sale/<str:pk>/payment/',SalesPayment.as_view(),name='sales-payment'),
 
     path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
