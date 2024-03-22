@@ -38,7 +38,7 @@ class SupplierAdminView(admin.ModelAdmin):
 
 
 class TransactionAdminView(admin.ModelAdmin):
-    list_display = ('id','product','transaction_type','payment_method','amount','reference', 'transaction_date')
+    list_display = ('id','product','sale','transaction_type','payment_method','amount','reference', 'transaction_date')
 
 
 class PurchaseAdminView(admin.ModelAdmin):
@@ -50,7 +50,7 @@ class GeneralUserAdminView(admin.ModelAdmin):
 
 
 class InvoiceAdminView(admin.ModelAdmin):
-    list_display = ('id','token','product','quantity','subtotal','sale_confirm')
+    list_display = ('id','token','sale_reference','product','quantity','subtotal','sale_confirm')
 
 
 class SalesAdminView(admin.ModelAdmin):

@@ -120,6 +120,17 @@ class SaleDetailsView(SuperuserRequiredMixin, DetailView):
     context_object_name = "sale"
     template_name = 'inventory/sales/saleDetails.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        sale_instance = self.object
+        context['invoice_list'] = ProductLineUp.objects.filter(sale_reference=sale_instance)
+        if sale_instance.user:
+            transaction = Transaction.objects.filter(sale=sale_instance).first()
+        else:
+            transaction = Transaction.objects.filter(sale=sale_instance).first()
+        context['transaction'] = transaction
+        return context
+
 
 # --------------------------------------------------------------- General user create view
 class ClientUserView(SuperuserRequiredMixin, CreateView):
@@ -237,7 +248,6 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
         obj.transaction_type = "IN"
         obj.reference = email
         obj.transaction_date = datetime.now()
-        obj.save()
         invoice_list = ProductLineUp.objects.filter(token=email, sale_confirm=False)
         self.total_product=0
         for each in invoice_list:
@@ -249,22 +259,29 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
             each.save()
         user = User.objects.filter(email=email).first()
         if user:
-            new_sale = Sales.objects.create(
+            self.sale = Sales.objects.create(
                 user=user,
                 amount=obj.amount,
                 product_quantity=self.total_product,
                 sales_date = obj.transaction_date
             )
-            new_sale.save()
+            self.sale.save()
+            obj.sale = self.sale
+            obj.save()
         else:
             general_user = GeneralUser.objects.get(email=email)
-            sale = Sales.objects.create(
+            self.sale = Sales.objects.create(
                 general_user=general_user,
                 amount=obj.amount,
                 product_quantity=self.total_product,
                 sales_date = obj.transaction_date
             )
-            sale.save()
+            self.sale.save()
+            obj.sale = self.sale
+            obj.save()
+        for each in invoice_list:
+            each.sale_reference = self.sale
+            each.save()
         return super().form_valid(form)
 
 

@@ -21,8 +21,8 @@
             <div class="row">
                 <div class="col-5">
                     <div class="card">
-                        <div class="card-header fw-bold text-success text-center">Customer Information</div>
-                        <div class="card-body">
+                        <div class="card-header fw-bold text-success text-center">Sale Information</div>
+                        <div class="card-body p-0">
                             <table class="m-0 table table-bordered border-secondary">
                                 <tbody>
                                     <tr>
@@ -51,16 +51,66 @@
                                         <td class="text-end">{{sale.general_user.phone}}</td>
                                     </tr>
                                     {%endif%}
+                                    <tr>
+                                        <td class="fw-bold">Product Quantity</td>
+                                        <td class="text-end">{{sale.product_quantity}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Amount</td>
+                                        <td class="text-end text-success">{{sale.amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Date & Time</td>
+                                        <td class="text-end text-primary">{{sale.sales_date}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Transaction Type</td>
+                                        <td class="text-end">{{transaction.transaction_type}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Payment Method</td>
+                                        <td class="text-end">{{transaction.payment_method}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Paid Amount</td>
+                                        <td class="text-end fw-bold text-success">{{transaction.amount}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-header">Transaction</div>
-                    </div>
                 </div>
                 <div class="col">
-                    Invoice list
+                    <table class="table">
+                        <thead class="sticky-top table-secondary">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col" class="text-center">Picture</th>
+                                <th scope="col" class="text-center">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                                <th scope="col" class="text-center">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for each in invoice_list%}
+                            <tr>
+                                <td>{{each.product.product.model}}</td>
+                                <td class="text-center">
+                                    <div class="overflow-hidden d-flex justify-content-center align-items-center">
+                                        {%if each.product.product.productImg %}
+                                        <img src="{{ each.product.product.productImg.url }}" alt="Product Image" width="60">
+                                        {%else%}
+                                        <img src="{% static 'media/default_images/default_product_image.png' %}" alt="{{ product.model }}">
+                                        {%endif%}
+                                    </div>
+                                </td>
+                                <td class="text-center">{{each.product.unit_price}}</td>
+                                <td class="text-center">{{each.quantity}}</td>
+                                <td class="text-center">{{each.subtotal}}</td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
