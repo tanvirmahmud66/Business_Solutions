@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
+from django.db.models.query import QuerySet
 from django.shortcuts import redirect
 from django.forms import BaseModelForm
 from django.http import HttpResponse
@@ -112,7 +113,24 @@ class SalesListView(SuperuserRequiredMixin, ListView):
     context_object_name = 'Sales'
     template_name = 'inventory/sales/salesList.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_q = self.request.GET.get('q', None)
 
+        # if search_q:
+        #     queryset = queryset.filter(user__first_name__icontains=search_q)
+            
+        if search_q:
+            queryset = queryset.filter(
+                Q(general_user__first_name__icontains=search_q) |
+                Q(general_user__last_name__icontains=search_q) |
+                Q(general_user__email__icontains=search_q) | 
+                Q(user__first_name__icontains=search_q) |
+                Q(user__last_name__icontains=search_q) |
+                Q(user__email__icontains=search_q) 
+            )
+
+        return queryset
 
 # --------------------------------------------------------------- Sale Details View
 class SaleDetailsView(SuperuserRequiredMixin, DetailView):

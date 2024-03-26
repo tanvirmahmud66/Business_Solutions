@@ -28,27 +28,27 @@
                 <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>     
           </form>
         </div>
-        <div class="card-body p-0 ps-3 pe-3 overflow-scroll">
-            <table class="table table-bordered border-warning">
+        <div class="card-body p-0 overflow-scroll">
+            <table class="table table-striped">
                 <thead class="table-secondary sticky-top">
                     <tr>
-                        <th scope="col">Company Name</th>
-                        <th scope="col" class="text-center">Email</th>
-                        <th scope="col" class="text-center">Contact Person</th>
-                        <th scope="col" class="text-center">Phone No.</th>
-                        <th scope="col" class="text-center">Address</th>
-                        <th scope="col" class="text-center">Option</th>
+                        <th scope="col" class="ps-3 align-middle">Company Name</th>
+                        <th scope="col" class="text-center align-middle">Email</th>
+                        <th scope="col" class="text-center align-middle">Contact Person</th>
+                        <th scope="col" class="text-center align-middle">Phone No.</th>
+                        <th scope="col" class="text-center align-middle">Address</th>
+                        <th scope="col" class="pe-3 text-center align-middle">Option</th>
                     </tr>
                 </thead>
                 <tbody>
                     {%for supplier in suppliers%}
                     <tr>
-                        <td>{{supplier.company_name}}</td>
-                        <td>{{supplier.email}}</td>
-                        <td>{{supplier.contact_person}}</td>
-                        <td>{{supplier.phone_number}}</td>
-                        <td>{{supplier.address}}</td>
-                        <td class="d-flex justify-content-center align-items-center">
+                        <td class="ps-3 align-middle">{{supplier.company_name}}</td>
+                        <td class="align-middle">{{supplier.email}}</td>
+                        <td class="align-middle">{{supplier.contact_person}}</td>
+                        <td class="align-middle">{{supplier.phone_number}}</td>
+                        <td class="align-middle">{{supplier.address}}</td>
+                        <td class="pe-3 d-flex justify-content-center align-items-center">
                             <a href="{%url 'supplier-update' supplier.id %}" class="btn btn-sm btn-outline-secondary me-1">Update</a>
                             <a href="{%url 'supplier-delete' supplier.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                         </td>

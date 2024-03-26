@@ -40,9 +40,21 @@
                         </a>
                     </li>
                     <li class="navItem">
-                        <a href="{%url 'inventory'%}" >
+                        <a href="{%url 'inventory-list'%}" >
                             <img src="{%static 'icons/nav/inventory.png'%}" width="25" alt="Inventory"/>    
                             <div class="navtitle">Inventory</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'sales-list'%}" >
+                            <img src="{%static 'icons/nav/sales.png'%}" width="25" alt="Inventory"/>    
+                            <div class="navtitle">Sales</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'purchase-list'%}" >
+                            <img src="{%static 'icons/nav/purchase.png'%}" width="25" alt="Inventory"/>    
+                            <div class="navtitle">Purchase</div>
                         </a>
                     </li>
                     <li class="navItem">
@@ -64,6 +76,24 @@
                         </a>
                     </li>
                     <li class="navItem">
+                        <a href="{%url 'category-list'%}">
+                            <img src="{%static 'icons/nav/category.png'%}" width="25" alt="Orders"/>    
+                            <div class="navtitle">Categories</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'brand-list'%}">
+                            <img src="{%static 'icons/nav/brand.png'%}" width="25" alt="Orders"/>    
+                            <div class="navtitle">Brand</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
+                        <a href="{%url 'product-list'%}">
+                            <img src="{%static 'icons/nav/product.png'%}" width="25" alt="Orders"/>    
+                            <div class="navtitle">Product</div>
+                        </a>
+                    </li>
+                    <li class="navItem">
                         <a href="{%url 'manage'%}">
                             <img src="{%static 'icons/nav/manage.png'%}" width="25" alt="Manage_Store"/>        
                             <div class="navtitle">Manage Store</div>
@@ -73,12 +103,12 @@
             </div>
             <div class="lower">
                 <ul class="navList">
-                    <li class="navItem">
+                    <!-- <li class="navItem">
                         <a href="#">
                             <img src="{%static 'icons/nav/settings.png'%}" width="23" alt="Settings"/>
                             <div class="navtitle">Settings</div>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="navItem">
                         <a href="{%url 'admin-logout'%}">
                             <img src="{%static 'icons/nav/logout.png'%}" width="25" alt="Logout"/>    

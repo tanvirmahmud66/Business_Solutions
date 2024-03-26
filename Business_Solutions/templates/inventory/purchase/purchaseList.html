@@ -60,35 +60,35 @@
                 <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>
           </form>        
         </div>
-        <div class="card-body p-0 ps-3 pe-3 overflow-scroll">
-            <table class="table table-bordered border-warning">
+        <div class="card-body p-0 overflow-scroll">
+            <table class="table table-striped">
                 <thead class="table-secondary sticky-top">
                     <tr>
-                        <th scope="col">Product</th>
-                        <th scope="col" class="text-center">Brand</th>
-                        <th scope="col" class="text-center">Category</th>
-                        <th scope="col" class="text-center">Quantity</th>
-                        <th scope="col" class="text-center">Unit Cost (BDT)</th>
-                        <th scope="col" class="text-center">Amount (BDT)</th>
-                        <th scope="col" class="text-center">Purchase Date</th>
-                        <th scope="col" class="text-center">Supplier</th>
-                        <th scope="col" class="text-center">Option</th>
+                        <th scope="col" class="ps-3">Product</th>
+                        <th scope="col" class="text-center align-middle">Brand</th>
+                        <th scope="col" class="text-center align-middle">Category</th>
+                        <th scope="col" class="text-center align-middle">Quantity</th>
+                        <th scope="col" class="text-center align-middle">Cost(BDT)</th>
+                        <th scope="col" class="text-center align-middle">Amount(BDT)</th>
+                        <th scope="col" class="text-center align-middle">Date</th>
+                        <th scope="col" class="text-center align-middle">Supplier</th>
+                        <th scope="col" class="pe-3 text-center align-middle">Option</th>
                     </tr>
                 </thead>
                 <tbody>
                     {%for each in purchases%}
                         <tr>
-                            <td class="">
+                            <td class="ps-3 align-middle">
                                 <a class="text-primary" href="{%url 'purchase-details' each.id%}">{{each.model}}</a>
                             </td>
-                            <td class="text-center">{{each.brand}}</td>
-                            <td class="text-center">{{each.category}}</td>
-                            <td class="text-center">{{each.quantity}}</td>
-                            <td class="text-center">{{each.unit_cost}}</td>
-                            <td class="text-center text-danger">{{each.paid_ammount}}</td>
-                            <td class="text-center">{{each.purchase_date.date}}</td>
-                            <td class="text-center text-primary">{{each.supplier}}</td>
-                            <td class="text-center text-primary">
+                            <td class="text-center align-middle">{{each.brand}}</td>
+                            <td class="text-center align-middle">{{each.category}}</td>
+                            <td class="text-center align-middle">{{each.quantity}}</td>
+                            <td class="text-center align-middle">{{each.unit_cost}}</td>
+                            <td class="text-center align-middle text-danger">{{each.paid_ammount}}</td>
+                            <td class="text-center align-middle">{{each.purchase_date.date}}</td>
+                            <td class="text-center align-middle text-primary">{{each.supplier}}</td>
+                            <td class="pe-3 text-center align-middle text-primary">
                                 <a href="{%url 'purchase-details' each.id%}" class="btn btn-sm btn-outline-secondary">details</a>
                             </td>
                         </tr>

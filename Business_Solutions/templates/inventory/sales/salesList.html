@@ -19,60 +19,44 @@
             <a href="{%url 'new-sale'%}" class="ms-2 btn btn-sm btn-success">New Sale</a>
         </div>
         <div class="card-header">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <form method="get" action="{%url 'inventory-list'%}" class="d-flex">
-                        <input class="form-control" type="text" name="q" placeholder="search product...">
-                        <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>
-                    </form>
-                </div>
-                <form method="get" action="{%url 'inventory-list'%}" class="ms-2 d-flex">
-                      <input class="form-control" type="number" name="price" placeholder="price">
-                      <div class="input-group">
-                        <select name="brand" class="form-select" id="inputGroupSelect02">
-                          <option disabled selected>brands...</option>
-                          {%for brand in brands%}
-                            <option value="{{brand.id}}">{{brand}}</option>
-                          {%endfor%}
-                        </select>
-                      </div>
-                      <div class="input-group">
-                        <select name="category" class="form-select" id="inputGroupSelect02">
-                          <option disabled selected>categories...</option>
-                          {%for category in categories%}
-                            <option value="{{category.id}}">{{category}}</option>
-                          {%endfor%}
-                        </select>
-                        <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>
-                      </div>                      
-                </form>
-            </div>
+          <div class="">
+            <form method="get" action="{%url 'sales-list'%}" class="d-flex">
+                <input class="form-control" type="text" name="q" placeholder="Search customer by Name or Email...">
+                <button class="btn btn-sm btn-outline-secondary" type="submit">Search</button>
+            </form>
+          </div>     
         </div>
-        <div class="card-body p-0 ps-3 pe-3 overflow-scroll">
-          <table class="table table-bordered border-warning">
+        <div class="card-body p-0 overflow-scroll">
+          <table class="table table-striped">
             <thead class="table-secondary sticky-top">
               <tr>
-                <th scope="col">Customer Name</th>
-                <th scope="col" class="text-center">Product Quantity</th>
-                <th scope="col" class="text-center">Payment amount</th>
-                <th scope="col" class="text-center">Date of Sale</th>
-                <th scope="col" class="text-center">Time</th>
-                <th scope="col" class="text-center">Option</th>
+                <th scope="col" class="ps-3">Customer Name</th>
+                <th scope="col" class="text-center align-middle">Email</th>
+                <th scope="col" class="text-center align-middle">Date of Sale</th>
+                <th scope="col" class="text-center align-middle">Time</th>
+                <th scope="col" class="text-center align-middle">Product Quantity</th>
+                <th scope="col" class="text-center align-middle">Payment amount</th>
+                <th scope="col" class="text-center align-middle">Option</th>
               </tr>
             </thead>
             <tbody>
               {%for sale in Sales%}
                 <tr>
                   {%if sale.user%}
-                    <td>{{sale.user.first_name}} {{sale.user.last_name}}</td>
+                    <td class="ps-3 align-middle">{{sale.user.first_name}} {{sale.user.last_name}}</td>
                   {%else%}
-                    <td>{{sale.general_user.first_name}} {{sale.general_user.last_name}}</td>
+                    <td class="ps-3 align-middle">{{sale.general_user.first_name}} {{sale.general_user.last_name}}</td>
                   {%endif%}
-                  <td class="text-center">{{sale.product_quantity}}</td>
-                  <td class="text-center fw-bold text-success">{{sale.amount}}</td>
-                  <td class="text-center">{{sale.sales_date.date}}</td>
-                  <td class="text-center text-primary">{{sale.sales_date.time}}</td>
-                  <td class="text-center">
+                  {%if sale.user%}
+                    <td class="align-middle">{{sale.user.email}}</td>
+                  {%else%}
+                    <td class="align-middle">{{sale.general_user.email}}</td>
+                  {%endif%}
+                  <td class="text-center align-middle">{{sale.sales_date.date}}</td>
+                  <td class="text-center align-middle text-primary">{{sale.sales_date.time}}</td>
+                  <td class="text-center align-middle">{{sale.product_quantity}}</td>
+                  <td class="text-center fw-bold text-success align-middle">{{sale.amount}}</td>
+                  <td class="text-center align-middle">
                     <a href="{%url 'sale-details' sale.id%}" class="btn btn-sm btn-outline-secondary">Details</a>
                   </td>
                 </tr>
