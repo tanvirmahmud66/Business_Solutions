@@ -7,15 +7,12 @@ document.addEventListener('DOMContentLoaded', function() {
     navItems.forEach(function(navItem) {
         var link = navItem.querySelector('a');
         var href = link.getAttribute('href');
-        console.log(href)
-
-        console.log(currentUrl.startsWith(href))
+        console.log("href",href)
+        console.log("current_url",currentUrl.startsWith(href))
         if (currentUrl === href || currentUrl.startsWith(href)) {
             navItem.classList.add('selected');
         }else{
             navItem.classList.remove('selected');
         }
-
-
     });
 });

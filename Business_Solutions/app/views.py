@@ -84,27 +84,68 @@ class AdminLogoutView(SuperuserRequiredMixin, LogoutView):
 
 # =========================================DASHBOARD SECTION========================================
 class DashboardView(SuperuserRequiredMixin, TemplateView):
-    template_name = 'dashboard/index.html'
+    template_name = 'dashboard/dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        sales_data = Sales.objects.all()
+        purchase_data = Purchase.objects.all()
+        stock_alert_data = Inventory.objects.filter(quantity__lt=5)
+        category_data = Categories.objects.all()
+        brand_data = Brand.objects.all()
+        sales = 0
+        purchase = 0
+        debt = 0
+        top_sale = []
+        top_brand = []
+        for each in sales_data:
+            sales += each.amount
+        for each in purchase_data:
+            purchase += each.paid_ammount
+            debt += each.due_amount
+        for each in category_data:
+            product_types = ProductLineUp.objects.filter(product__product__category=each, sale_confirm=True)
+            product_count = 0
+            for each_item in product_types:
+                product_count += each_item.quantity
+            top_sale.append({
+                f"{each}": product_count
+            })
+        for each in brand_data:
+            product_types = ProductLineUp.objects.filter(product__product__brand=each, sale_confirm=True)
+            brand_count = 0
+            for each_item in product_types:
+                brand_count += each_item.quantity
+            top_brand.append({
+                f"{each}": brand_count
+            })
+        context['sales'] = sales
+        context['purchase'] = purchase
+        context['debt'] = debt
+        context['stock_alert'] = stock_alert_data
+        context['top_sale'] = top_sale
+        context['top_brand'] = top_brand
+        return context
 
 
 # ==========================================INVENTORY SECTION=======================================
 # ---------------------------------------------------------------Inventory View
-class InventoryView(SuperuserRequiredMixin,ListView):
-    template_name = 'inventory/inventory.html'
-    context_object_name = 'data'
+# class InventoryView(SuperuserRequiredMixin,ListView):
+#     template_name = 'inventory/inventory.html'
+#     context_object_name = 'data'
 
-    def get_queryset(self):
-        categories = Categories.objects.all().order_by('id')[:5]
-        brands = Brand.objects.all().order_by('id')[:5]
-        products = Product.objects.all().order_by('-id')[:5]
-        inventories = Inventory.objects.all().order_by('-id')[:5]
+#     def get_queryset(self):
+#         categories = Categories.objects.all().order_by('id')[:5]
+#         brands = Brand.objects.all().order_by('id')[:5]
+#         products = Product.objects.all().order_by('-id')[:5]
+#         inventories = Inventory.objects.all().order_by('-id')[:5]
 
-        return {
-            'inventories': inventories,
-            'products': products,
-            'categories': categories,
-            'brands': brands,
-        }
+#         return {
+#             'inventories': inventories,
+#             'products': products,
+#             'categories': categories,
+#             'brands': brands,
+#         }
 
 
 # --------------------------------------------------------------- Sales List View

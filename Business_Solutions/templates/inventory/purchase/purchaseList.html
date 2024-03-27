@@ -14,11 +14,8 @@
 <div class="inventory">
 
     <div class="card height-100">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <a href="{%url 'inventory'%}" class="btn-back">
-                <img src="{%static 'icons/inventory/back.png'%}" width="20" alt=""/>
-            </a>
-            <div class="fs-4 fw-bold">Purchase List</div>
+        <div class="card-header d-flex justify-content-end align-items-center position-relative">
+            <div class="fs-4 fw-bold position-absolute top-50 start-50 translate-middle">Purchase List</div>
             <a href="{%url 'new-purchase'%}" class="btn btn-success btn-sm">New Purchase</a>
         </div>
         <div class="card-header d-flex justify-content-between align-items-center">

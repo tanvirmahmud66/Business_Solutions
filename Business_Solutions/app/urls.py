@@ -1,7 +1,4 @@
 from django.urls import path
-from .views import DashboardView, InventoryView, CategoryListView,CreateCategoryView,StoreManageView, OrderView, ReportView
-from .views import CreateBrandView, BrandListView, InventoryListView, ProductListView, CreateProductView, InventoryDetailsView, InventoryUpdateView, InventoryDeleteView
-
 from .views import (
 
     AdminCreateView,
@@ -9,8 +6,6 @@ from .views import (
     AdminLogoutView,
 
     DashboardView,
-
-    InventoryView,
 
     SalesListView,
     SaleDetailsView,
@@ -54,6 +49,11 @@ from .views import (
     SupplierUpdateView,
     SupplierDeleteView,
 
+    ReportView,
+
+    OrderView,
+
+    StoreManageView,
 )
 
 urlpatterns = [
@@ -64,9 +64,9 @@ urlpatterns = [
 
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
 
-    path('inventory/', InventoryView.as_view(), name='inventory'),
+    # path('inventory/', InventoryView.as_view(), name='inventory'),
     
-    path('sales/sales-list/',SalesListView.as_view(),name='sales-list'),
+    path('sales/',SalesListView.as_view(),name='sales-list'),
     path('sales/new-sale/',ClientUserView.as_view(),name='new-sale'),
     path('sales/<int:pk>/sale-details/',SaleDetailsView.as_view(),name='sale-details'),
     path('sales/new-sale/<str:pk>/invoice/', InvoiceListView.as_view(),name='invoice-list'),
@@ -75,30 +75,30 @@ urlpatterns = [
     path('sales/new-sale/<str:email>/invoice/<int:pk>/remove-item/',InvoiceRemoveItem.as_view(),name='invoice-remove-item'),
     path('sales/new-sale/<str:pk>/payment/',SalesPayment.as_view(),name='sales-payment'),
 
-    path('inventory/inventory-list/', InventoryListView.as_view(), name='inventory-list'),
+    path('inventory/', InventoryListView.as_view(), name='inventory-list'),
     path('inventory/<int:pk>/details/',InventoryDetailsView.as_view(),name='inventory-details'),
     path('inventory/<int:pk>/set-price/',InventoryPriceSet.as_view(),name='inventory-setPrice'),
     path('inventory/<int:pk>/update/',InventoryUpdateView.as_view(),name='inventory-update'),
     path('inventory/<int:pk>/delete/',InventoryDeleteView.as_view(),name='inventory-delete'),
 
-    path('purchase/purchase-list/', PurchaseListView.as_view(),name='purchase-list'),
+    path('purchase/', PurchaseListView.as_view(),name='purchase-list'),
     path('purchase/new-purchase/',PurchaseCreateView.as_view(),name='new-purchase'),
     path('purchase/<int:pk>/details/',PurchaseDetailsView.as_view(),name='purchase-details'),
     path('purchase/<int:pk>/update/',PurchaseUpdateView.as_view(),name='purchase-update'),
     path('purchase/<int:pk>/delete/',PurchaseDeleteView.as_view(),name='purchase-delete'),
 
-    path('product/product-list/', ProductListView.as_view(), name='product-list'),
+    path('product/', ProductListView.as_view(), name='product-list'),
     path('product/create-product/', CreateProductView.as_view(), name='create-product'),
     path('product/<int:pk>/details/', ProductDetailsView.as_view(), name='product-details'),
     path('product/<int:pk>/update/', ProductUpdateView.as_view(), name='product-update'),
     path('product/<int:pk>/delete/',ProductDeleteView.as_view(), name='product-delete'),
 
-    path('category/category-list/',CategoryListView.as_view(),name='category-list'),
+    path('category/',CategoryListView.as_view(),name='category-list'),
     path('category/create-category/', CreateCategoryView.as_view(), name='create-category'),
     path('category/<int:pk>/update/',CategoryUpdateView.as_view(),name='category-update'),
     path('category/<int:pk>/delete/',CategoryDeleteView.as_view(),name='category-delete'),
 
-    path('brand/brand-list/', BrandListView.as_view(), name='brand-list'),
+    path('brand/', BrandListView.as_view(), name='brand-list'),
     path('brand/create-brand/', CreateBrandView.as_view(), name='create-brand'),
     path('brand/<int:pk>/update/', BrandUpdateView.as_view(), name='brand-update'),
     path('brand/<int:pk>/delete', BrandDeleteView.as_view(), name='brand-delete'),
