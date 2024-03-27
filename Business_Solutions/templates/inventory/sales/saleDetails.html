@@ -84,18 +84,18 @@
                     <table class="table border">
                         <thead class="sticky-top table-secondary">
                             <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col" class="text-center">Picture</th>
-                                <th scope="col" class="text-center">Price</th>
-                                <th scope="col" class="text-center">Quantity</th>
-                                <th scope="col" class="text-center">Subtotal</th>
+                                <th scope="col" class="align-middle">Product</th>
+                                <th scope="col" class="text-center align-middle">Picture</th>
+                                <th scope="col" class="text-center align-middle">Price</th>
+                                <th scope="col" class="text-center align-middle">Quantity</th>
+                                <th scope="col" class="text-center align-middle">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
                             {%for each in invoice_list%}
                             <tr>
-                                <td>{{each.product.product.model}}</td>
-                                <td class="text-center">
+                                <td class="align-middle">{{each.product.product.model}}</td>
+                                <td class="text-center align-middle">
                                     <div class="overflow-hidden d-flex justify-content-center align-items-center">
                                         {%if each.product.product.productImg %}
                                         <img src="{{ each.product.product.productImg.url }}" alt="Product Image" width="60">
@@ -104,9 +104,9 @@
                                         {%endif%}
                                     </div>
                                 </td>
-                                <td class="text-center">{{each.product.unit_price}}</td>
-                                <td class="text-center">{{each.quantity}}</td>
-                                <td class="text-center">{{each.subtotal}}</td>
+                                <td class="text-center align-middle">{{each.product.unit_price}}</td>
+                                <td class="text-center align-middle">{{each.quantity}}</td>
+                                <td class="text-center align-middle fw-bold text-success">{{each.subtotal}}</td>
                             </tr>
                             {%endfor%}
                         </tbody>

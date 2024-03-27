@@ -66,7 +66,7 @@
                 <tbody>
                     {%for inventory in inventories%}
                     <tr>
-                        <td class="ps-3 align-middle"><a href="{%url 'inventory-details' inventory.id%}">{{inventory.product}}</a></td>
+                        <td class="ps-3 align-middle"><a href="{%url 'inventory-details' inventory.id%}" class="text-primary">{{inventory.product}}</a></td>
                         <td class="text-center align-middle">
                             <div>
                                 {{inventory.product.brand}}

@@ -128,25 +128,9 @@ class DashboardView(SuperuserRequiredMixin, TemplateView):
         return context
 
 
-# ==========================================INVENTORY SECTION=======================================
-# ---------------------------------------------------------------Inventory View
-# class InventoryView(SuperuserRequiredMixin,ListView):
-#     template_name = 'inventory/inventory.html'
-#     context_object_name = 'data'
 
-#     def get_queryset(self):
-#         categories = Categories.objects.all().order_by('id')[:5]
-#         brands = Brand.objects.all().order_by('id')[:5]
-#         products = Product.objects.all().order_by('-id')[:5]
-#         inventories = Inventory.objects.all().order_by('-id')[:5]
 
-#         return {
-#             'inventories': inventories,
-#             'products': products,
-#             'categories': categories,
-#             'brands': brands,
-#         }
-
+# ==========================================SALES SECTION=======================================
 
 # --------------------------------------------------------------- Sales List View
 class SalesListView(SuperuserRequiredMixin, ListView):
@@ -219,9 +203,8 @@ class ClientUserView(SuperuserRequiredMixin, CreateView):
             return redirect('invoice-list', pk=form.data['email'])
         return super().form_invalid(form)
     
-    
-    
 
+   
 # --------------------------------------------------------------- invoice list
 class InvoiceListView(SuperuserRequiredMixin, ListView):
     model = ProductLineUp
@@ -345,6 +328,7 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
 
 
 
+# ==========================================INVENTORY SECTION=======================================
 # ---------------------------------------------------------------Inventory list view
 class InventoryListView(SuperuserRequiredMixin,ListView):
     model = Inventory
@@ -454,6 +438,7 @@ class InventoryDeleteView(SuperuserRequiredMixin,DeleteView):
 
 
 
+# ==========================================PURCHASE SECTION=======================================
 #----------------------------------------------------------------Purchase list view
 class PurchaseListView(SuperuserRequiredMixin,ListView):
     model = Purchase
@@ -642,6 +627,9 @@ class PurchaseDeleteView(SuperuserRequiredMixin,DeleteView):
     template_name = 'inventory/purchase/purchaseDelete.html'
     success_url = reverse_lazy('purchase-list')
 
+
+
+# ==========================================PRODUCT SECTION=======================================
 # ---------------------------------------------------------------product list View
 class ProductListView(SuperuserRequiredMixin,ListView):
     model = Product
@@ -729,6 +717,8 @@ class ProductDeleteView(SuperuserRequiredMixin,DeleteView):
     success_url = reverse_lazy('product-list')
 
 
+
+# ==========================================CATEGORY SECTION=======================================
 # ---------------------------------------------------------------Category Create view
 class CreateCategoryView(SuperuserRequiredMixin,CreateView):
     model = Categories
@@ -770,6 +760,8 @@ class CategoryDeleteView(SuperuserRequiredMixin,DeleteView):
     success_url = reverse_lazy('category-list')
 
 
+
+# ==========================================BRAND SECTION=======================================
 # ---------------------------------------------------------------Brand list view
 class BrandListView(SuperuserRequiredMixin,ListView):
     model = Brand
@@ -816,7 +808,7 @@ class BrandDeleteView(SuperuserRequiredMixin,DeleteView):
 
 # ==========================================REPORT SECTION=======================================
 class ReportView(SuperuserRequiredMixin,TemplateView):
-    template_name = 'reports/index.html'
+    template_name = 'reports/report.html'
 
 # ==========================================SUPPLIERS SECTION=======================================
 # ---------------------------------------------------------------Supplier List view
@@ -850,7 +842,7 @@ class SupplierDeleteView(SuperuserRequiredMixin,DeleteView):
 
 # ==========================================ORDER SECTION=======================================
 class OrderView(SuperuserRequiredMixin,TemplateView):
-    template_name = 'orders/index.html'
+    template_name = 'orders/order.html'
 
 # ==========================================MANAGE STORE SECTION=======================================
 class StoreManageView(SuperuserRequiredMixin,TemplateView):
