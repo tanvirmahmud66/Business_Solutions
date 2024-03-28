@@ -9,6 +9,10 @@ a{
     color: black;
 }
 
+.dropdown-menu{
+    z-index: 1050 !important; 
+}
+
 .mother-div{
     width: 100vw;
     height: 100vh;

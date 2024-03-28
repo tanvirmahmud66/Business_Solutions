@@ -2,20 +2,18 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import AccessMixin
 from datetime import datetime
-from django.db.models.query import QuerySet
+from django.utils import timezone
 from django.shortcuts import redirect
-from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
 from django.http import JsonResponse
-from datetime import datetime
+from django.utils import timezone
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
 from django.db.models import Q
 from django.db.models import Sum
+from django.db.models.functions import ExtractWeekDay
 from django.views.generic import (
-    FormView,
     TemplateView, 
     ListView, 
     CreateView, 
@@ -51,20 +49,26 @@ from .forms import (
 )
 
 # =========================================AUTHENTICATION SECTION===================================
-# ----------------------------------------------------Permission Mixin
+# ---------------------------------------------------- Mixin
 class SuperuserRequiredMixin(UserPassesTestMixin):
     def test_func(self):
         return self.request.user.is_superuser
+
+class PreventLoggedInMixin(AccessMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
     
 # -------------------------------------------------Admin singup view
-class AdminCreateView(CreateView):
+class AdminCreateView(PreventLoggedInMixin,CreateView):
     template_name = 'authentication/singup.html'
     form_class = AdminCreateForm
     success_url = reverse_lazy('dashboard')
 
 
 # -------------------------------------------------Admin login view
-class AdminLoginView(LoginView):
+class AdminLoginView(PreventLoggedInMixin,LoginView):
     template_name = 'authentication/login.html'
     success_url = reverse_lazy('dashboard')
 
@@ -119,12 +123,18 @@ class DashboardView(SuperuserRequiredMixin, TemplateView):
             top_brand.append({
                 f"{each}": brand_count
             })
+        
+        current_year = timezone.now().year
+        current_month = timezone.now().month
+        monthly_sales_data = Sales.objects.filter(sales_date__year=current_year, sales_date__month=current_month)
+
         context['sales'] = sales
         context['purchase'] = purchase
         context['debt'] = debt
         context['stock_alert'] = stock_alert_data
         context['top_sale'] = top_sale
         context['top_brand'] = top_brand
+        context['monthly_sales'] = monthly_sales_data
         return context
 
 
@@ -810,6 +820,8 @@ class BrandDeleteView(SuperuserRequiredMixin,DeleteView):
 class ReportView(SuperuserRequiredMixin,TemplateView):
     template_name = 'reports/report.html'
 
+
+
 # ==========================================SUPPLIERS SECTION=======================================
 # ---------------------------------------------------------------Supplier List view
 class SuppliersListView(SuperuserRequiredMixin,ListView):
@@ -840,9 +852,12 @@ class SupplierDeleteView(SuperuserRequiredMixin,DeleteView):
     template_name = 'suppliers/supplierDelete.html'
     success_url = reverse_lazy('supplier-list')
 
+
+
 # ==========================================ORDER SECTION=======================================
 class OrderView(SuperuserRequiredMixin,TemplateView):
     template_name = 'orders/order.html'
+
 
 # ==========================================MANAGE STORE SECTION=======================================
 class StoreManageView(SuperuserRequiredMixin,TemplateView):
