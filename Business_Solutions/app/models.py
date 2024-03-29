@@ -26,12 +26,16 @@ class UserManager(BaseUserManager):
         return user
 
 
+def profile_image_path(instance, filename):
+    return os.path.join('Admin_profile_images', f'{instance.email}', filename)
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    profile_pic = models.ImageField(upload_to=profile_image_path, null=True, blank=True)
 
     objects = UserManager()
 

@@ -4,6 +4,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import AccessMixin
 from datetime import datetime
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -35,6 +37,7 @@ from .models import (
 )
 from .forms import (
     AdminCreateForm,
+    UserProfilePictureForm,
     CategoryForm , 
     BrandForm, 
     InventoryForm,
@@ -84,7 +87,28 @@ class AdminLoginView(PreventLoggedInMixin,LoginView):
 class AdminLogoutView(SuperuserRequiredMixin, LogoutView):
     next_page = reverse_lazy('admin-login')
         
+# ========================================= Admin User profile =====================================
+# ---------------------------------------------------------- Profile view
+class ProfileView(SuperuserRequiredMixin, DetailView):
+    model = User
+    context_object_name = 'profile'
+    template_name = 'profile/profile.html'
 
+    def get_object(self, queryset=None):
+        pk = self.request.user.id
+        return self.model.objects.get(id=pk)
+
+
+# ---------------------------------------------------------- Profile change picture View
+class ProfileChangePictureView(SuperuserRequiredMixin,UpdateView):
+    model = User
+    form_class = UserProfilePictureForm
+    template_name = 'profile/pictureChange.html'
+
+# ---------------------------------------------------------- Profile Update View
+class ProfileUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = User
+    template_name = 'profile/profileUpdate.html'
 
 # =========================================DASHBOARD SECTION========================================
 class DashboardView(SuperuserRequiredMixin, TemplateView):

@@ -36,7 +36,11 @@ class AdminCreateForm(UserCreationForm):
         user.save(using=self._db)  # Ensure the proper database is used
         return user
 
-
+# -------------------------------------- Profile Picture Form
+class UserProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['profile_pic']
 
 # -------------------------------------- Category Form
 class CategoryForm(forms.ModelForm):

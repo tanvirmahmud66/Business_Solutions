@@ -5,6 +5,11 @@ from .views import (
     AdminLoginView,
     AdminLogoutView,
 
+    ProfileView,
+    ProfileChangePictureView,
+    ProfileUpdateView,
+
+
     DashboardView,
 
     SalesListView,
@@ -61,10 +66,12 @@ urlpatterns = [
     path('',AdminLoginView.as_view(),name='admin-login'),
     path('signup/',AdminCreateView.as_view(),name='admin-signup'),
     path('logout/', AdminLogoutView.as_view(), name='admin-logout'),
+    
+    path('profile/<int:pk>/',ProfileView.as_view(),name='profile'),
+    path('profile/<int:pk>/change-picture/',ProfileChangePictureView.as_view(),name='profile-change-picture'),
+    path('profile/<int:pk>/update-profile/',ProfileUpdateView.as_view(),name='profile-update'),
 
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
-
-    # path('inventory/', InventoryView.as_view(), name='inventory'),
     
     path('sales/',SalesListView.as_view(),name='sales-list'),
     path('sales/new-sale/',ClientUserView.as_view(),name='new-sale'),
