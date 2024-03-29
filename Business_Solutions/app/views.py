@@ -38,6 +38,7 @@ from .models import (
 from .forms import (
     AdminCreateForm,
     UserProfilePictureForm,
+    ProfileUpdateForm,
     CategoryForm , 
     BrandForm, 
     InventoryForm,
@@ -86,7 +87,9 @@ class AdminLoginView(PreventLoggedInMixin,LoginView):
 # ----------------------------------------------------------Admin login view
 class AdminLogoutView(SuperuserRequiredMixin, LogoutView):
     next_page = reverse_lazy('admin-login')
-        
+
+
+
 # ========================================= Admin User profile =====================================
 # ---------------------------------------------------------- Profile view
 class ProfileView(SuperuserRequiredMixin, DetailView):
@@ -100,15 +103,32 @@ class ProfileView(SuperuserRequiredMixin, DetailView):
 
 
 # ---------------------------------------------------------- Profile change picture View
-class ProfileChangePictureView(SuperuserRequiredMixin,UpdateView):
+class ProfilePictureChangeView(SuperuserRequiredMixin,UpdateView):
     model = User
     form_class = UserProfilePictureForm
     template_name = 'profile/pictureChange.html'
 
+    def get_success_url(self):
+        return reverse('profile',kwargs={'pk': self.kwargs.get('pk', None)})
+
+
+# ---------------------------------------------------------- Profile Picture Remove View
+class ProfilePictureRemoveView(UpdateView):
+    model = User
+    form_class = UserProfilePictureForm
+    template_name = 'profile/pictureRemove.html'
+
+
 # ---------------------------------------------------------- Profile Update View
 class ProfileUpdateView(SuperuserRequiredMixin, UpdateView):
     model = User
+    form_class = ProfileUpdateForm
     template_name = 'profile/profileUpdate.html'
+
+    def get_success_url(self):
+        return reverse('profile',kwargs={'pk': self.kwargs.get('pk', None)})
+
+
 
 # =========================================DASHBOARD SECTION========================================
 class DashboardView(SuperuserRequiredMixin, TemplateView):

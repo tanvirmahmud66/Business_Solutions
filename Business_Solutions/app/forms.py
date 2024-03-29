@@ -42,6 +42,14 @@ class UserProfilePictureForm(forms.ModelForm):
         model = User
         fields = ['profile_pic']
 
+
+# -------------------------------------- Profile Picture Form
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name','last_name','email']
+
+
 # -------------------------------------- Category Form
 class CategoryForm(forms.ModelForm):
     class Meta:

@@ -27,8 +27,14 @@
                     <img src="{%static 'media/default_images/default_profile_image.jpg'%}" alt="defualt profile picture"/>
                 {%endif%}
             </div>
-            <div class="text-center">
-                <a href="{%url 'profile-change-picture' profile.id %}" class="btn btn-sm btn-outline-success">Change Picture</a>
+            <div class="text-center mt-3">
+                {%if profile.profile_pic%}
+                <a href="{%url 'profile-picture-remove' profile.id %}" class="btn btn-sm btn-outline-danger">Remove</a>
+                <a href="{%url 'profile-change-picture' profile.id %}" class="btn btn-sm btn-success">Change Picture</a>
+                {%else%}
+                <a href="{%url 'profile-change-picture' profile.id %}" class="btn btn-sm btn-outline-success">Upload Picture</a>
+                {%endif%}
+                
             </div>
             
         </div>
