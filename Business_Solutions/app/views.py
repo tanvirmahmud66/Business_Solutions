@@ -6,9 +6,10 @@ from django.contrib.auth.mixins import AccessMixin
 from datetime import datetime
 from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
+from django.forms import BaseModelForm
 from django.utils import timezone
 from django.shortcuts import redirect
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import DeleteView
@@ -116,7 +117,17 @@ class ProfilePictureChangeView(SuperuserRequiredMixin,UpdateView):
 class ProfilePictureRemoveView(UpdateView):
     model = User
     form_class = UserProfilePictureForm
+    context_object_name = 'profile'
     template_name = 'profile/pictureRemove.html'
+
+    def get_success_url(self):
+        return reverse('profile',kwargs={'pk': self.kwargs.get('pk', None)})
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.profile_pic = None
+        obj.save
+        return super().form_valid(form)
 
 
 # ---------------------------------------------------------- Profile Update View
