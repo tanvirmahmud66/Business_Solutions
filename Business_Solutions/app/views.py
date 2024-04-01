@@ -85,9 +85,14 @@ class AdminLoginView(PreventLoggedInMixin,LoginView):
             return reverse_lazy('admin-login')
 
 
-# ----------------------------------------------------------Admin login view
+# ----------------------------------------------------------Admin logout view
 class AdminLogoutView(SuperuserRequiredMixin, LogoutView):
     next_page = reverse_lazy('admin-login')
+
+
+# ---------------------------------------------------------- Forget password view
+class ForgetPasswordView(PreventLoggedInMixin, TemplateView):
+    template_name = 'authentication/forgetPassword.html'
 
 
 

@@ -18,6 +18,16 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Email Settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'tanvirmahmudfahim1313@gmail.com' 
+EMAIL_HOST_PASSWORD = 'grfbijfgpnutwtdv' 
+DEFAULT_FROM_EMAIL = 'tanvirmahmudfahim1313@gmail.com'  
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -143,3 +153,9 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+PASSWORD_RESET_TEMPLATE = 'authentication/password_reset_form.html'
+PASSWORD_RESET_DONE_TEMPLATE = 'authentication/password_reset_done.html'
+PASSWORD_RESET_CONFIRM_TEMPLATE = 'authentication/password_reset_confirm.html'
+PASSWORD_RESET_COMPLETE_TEMPLATE = 'authentication/password_reset_complete.html'
