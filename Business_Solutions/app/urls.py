@@ -5,7 +5,6 @@ from .views import (
     AdminCreateView,
     AdminLoginView,
     AdminLogoutView,
-    ForgetPasswordView,
 
     ProfileView,
     ProfilePictureChangeView,
