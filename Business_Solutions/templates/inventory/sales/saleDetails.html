@@ -56,10 +56,6 @@
                                         <td class="text-end">{{sale.product_quantity}}</td>
                                     </tr>
                                     <tr>
-                                        <td class="fw-bold">Amount</td>
-                                        <td class="text-end text-success">{{sale.amount}}</td>
-                                    </tr>
-                                    <tr>
                                         <td class="fw-bold">Date & Time</td>
                                         <td class="text-end text-primary">{{sale.sales_date}}</td>
                                     </tr>
@@ -70,6 +66,10 @@
                                     <tr>
                                         <td class="fw-bold">Payment Method</td>
                                         <td class="text-end">{{transaction.payment_method}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-bold">Grand Total</td>
+                                        <td class="text-end text-success">{{grand_total}}</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-bold">Paid Amount</td>
@@ -106,9 +106,16 @@
                                 </td>
                                 <td class="text-center align-middle">{{each.product.unit_price}}</td>
                                 <td class="text-center align-middle">{{each.quantity}}</td>
-                                <td class="text-center align-middle fw-bold text-success">{{each.subtotal}}</td>
+                                <td class="text-center align-middle text-success">{{each.subtotal}}</td>
                             </tr>
                             {%endfor%}
+                            <tr>
+                                <td class="align-middle fw-bold">Grand Total</td>
+                                <td class="text-center align-middle"></td>
+                                <td class="text-center align-middle"></td>
+                                <td class="text-center align-middle "></td>
+                                <td class="text-center align-middle fw-bold text-success">{{grand_total}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

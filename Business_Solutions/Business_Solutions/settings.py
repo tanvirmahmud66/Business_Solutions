@@ -78,24 +78,24 @@ WSGI_APPLICATION = 'Business_Solutions.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'business_solutions', #database name
-        'USER': 'tanvirmahmud', #username
-        'PASSWORD': '1821131', #database root password
-        'HOST': 'localhost',  # localhost
-        'PORT': '5432',  # Default port is 5432
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'business_solutions', #database name
+#         'USER': 'tanvirmahmud', #username
+#         'PASSWORD': '1821131', #database root password
+#         'HOST': 'localhost',  # localhost
+#         'PORT': '5432',  # Default port is 5432
+#     }
+# }
 
 
 

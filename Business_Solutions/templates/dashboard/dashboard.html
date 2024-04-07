@@ -63,7 +63,7 @@
     <div class="row gap-3">
       <div class="col-5 card bg-dark bg-opacity-10">
         <div class="card-body">
-          <div class="fw-bold text-center fs-5">Top selling product</div>
+          <div class="fw-bold text-center fs-5">Top 5 selling product</div>
           <div class="mt-2">
             <canvas id="topSellChart"></canvas>
           </div>
@@ -214,7 +214,7 @@
               {%endfor%}
             ],
             datasets: [{
-              label: 'My First Dataset',
+              label: 'Total sale item',
               data: [
               {%for each in top_brand%}
                 {%for key, value in each.items%}

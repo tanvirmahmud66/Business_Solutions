@@ -188,8 +188,8 @@ class DashboardView(SuperuserRequiredMixin, TemplateView):
         context['purchase'] = purchase
         context['debt'] = debt
         context['stock_alert'] = stock_alert_data
-        context['top_sale'] = top_sale
-        context['top_brand'] = top_brand
+        context['top_sale'] = sorted(top_sale, key=lambda x: list(x.values())[0], reverse=True)[:5]
+        context['top_brand'] = sorted(top_brand, key=lambda x: list(x.values())[0], reverse=True)[:5]
         context['monthly_sales'] = monthly_sales_data
         return context
 
@@ -232,7 +232,10 @@ class SaleDetailsView(SuperuserRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         sale_instance = self.object
-        context['invoice_list'] = ProductLineUp.objects.filter(sale_reference=sale_instance)
+        product_list = ProductLineUp.objects.filter(sale_reference=sale_instance)
+        grand_total = product_list.aggregate(total_amount=Sum('subtotal'))['total_amount']
+        context['invoice_list'] = product_list
+        context['grand_total'] = grand_total
         if sale_instance.user:
             transaction = Transaction.objects.filter(sale=sale_instance).first()
         else:

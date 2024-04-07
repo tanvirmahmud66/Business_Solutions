@@ -53,6 +53,7 @@
                 <thead class="table-secondary sticky-top">
                     <tr>
                         <th scope="col" class="ps-3 align-middle">Product Name</th>
+                        <th scope="col" class="ps-3 align-middle">Picture</th>
                         <th scope="col" class="text-center align-middle">Brand</th>
                         <th scope="col" class="text-center align-middle">Category</th>
                         <th scope="col" class="text-center align-middle">Price(BDT)</th>
@@ -64,10 +65,19 @@
                     {%for product in products%}
                     <tr>
                         <td class="ps-3 align-middle"><a href="{%url 'product-details' product.id%}" class="text-primary">{{product}}</a></td>
+                        <td class="text-center align-middle">
+                          <div class="overflow-hidden d-flex justify-content-center align-items-center">
+                              {%if product.productImg %}
+                              <img src="{{ product.productImg.url }}" alt="Product Image" width="60">
+                              {%else%}
+                              <img src="{% static 'media/default_images/default_product_image.png' %}" alt="{{ product.model }}">
+                              {%endif%}
+                          </div>
+                      </td>
                         <td class="text-center align-middle">{{product.brand}}</td>
                         <td class="text-center align-middle">{{product.category}}</td>
-                        <td class="text-center align-middle">{{product.price}}</td>
-                        <td class="text-center align-middle">{{product.cost}}</td>
+                        <td class="text-center align-middle text-success">{{product.price}}</td>
+                        <td class="text-center align-middle text-danger">{{product.cost}}</td>
                         <td class="pe-2 text-center align-middle"><a href="{%url 'product-details' product.id%}" class="btn btn-sm btn-outline-secondary">Details</a></td>
                       </tr>
                     {%endfor%}

@@ -40,12 +40,14 @@
               {%for sale in Sales%}
                 <tr>
                   {%if sale.user%}
-                    <td class="ps-3 align-middle">{{sale.user.first_name}} {{sale.user.last_name}}</td>
+                    <td class="ps-3 align-middle">
+                      <a href="{%url 'sale-details' sale.id%}" class="text-primary">{{sale.user.first_name}} {{sale.user.last_name}}</a>
+                    </td>
                   {%else%}
                     <td class="ps-3 align-middle">{{sale.general_user.first_name}} {{sale.general_user.last_name}}</td>
                   {%endif%}
                   {%if sale.user%}
-                    <td class="align-middle">{{sale.user.email}}</td>
+                    <td class="text-center align-middle">{{sale.user.email}}</td>
                   {%else%}
                     <td class="align-middle">{{sale.general_user.email}}</td>
                   {%endif%}

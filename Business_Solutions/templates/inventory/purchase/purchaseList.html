@@ -65,10 +65,10 @@
                         <th scope="col" class="text-center align-middle">Brand</th>
                         <th scope="col" class="text-center align-middle">Category</th>
                         <th scope="col" class="text-center align-middle">Quantity</th>
-                        <th scope="col" class="text-center align-middle">Cost(BDT)</th>
-                        <th scope="col" class="text-center align-middle">Amount(BDT)</th>
-                        <th scope="col" class="text-center align-middle">Date</th>
-                        <th scope="col" class="text-center align-middle">Supplier</th>
+                        <th scope="col" class="text-center align-middle">Cost</th>
+                        <th scope="col" class="text-center align-middle">Payment</th>
+                        <th scope="col" class="text-center align-middle">Due</th>
+                        <th scope="col" class="text-center align-middle">Purchase-Date</th>
                         <th scope="col" class="pe-3 text-center align-middle">Option</th>
                     </tr>
                 </thead>
@@ -82,9 +82,9 @@
                             <td class="text-center align-middle">{{each.category}}</td>
                             <td class="text-center align-middle">{{each.quantity}}</td>
                             <td class="text-center align-middle">{{each.unit_cost}}</td>
-                            <td class="text-center align-middle text-danger">{{each.paid_ammount}}</td>
+                            <td class="text-center align-middle text-success">{{each.paid_ammount}}</td>
+                            <td class="text-center align-middle text-danger">{{each.due_amount}}</td>
                             <td class="text-center align-middle">{{each.purchase_date.date}}</td>
-                            <td class="text-center align-middle text-primary">{{each.supplier}}</td>
                             <td class="pe-3 text-center align-middle text-primary">
                                 <a href="{%url 'purchase-details' each.id%}" class="btn btn-sm btn-outline-secondary">details</a>
                             </td>

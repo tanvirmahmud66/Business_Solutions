@@ -22,7 +22,7 @@
         <div class="card-header d-flex justify-content-end align-items-center">
             <form method="get" action="{%url 'inventory-list'%}" class="ms-2 d-flex">
                 <input class="form-control" type="text" name="company" placeholder="Company..">
-                <input class="form-control" type="email" name="email" placeholder="Emain">
+                <input class="form-control" type="email" name="email" placeholder="Email">
                 <input class="form-control" type="text" name="person" placeholder="Person..">
                 <input class="form-control" type="text" name="phone" placeholder="Phone..">
                 <button type="submit" class="btn btn-outline-secondary input-group-text" for="inputGroupSelect02">Filter</button>     
@@ -48,9 +48,11 @@
                         <td class="align-middle">{{supplier.contact_person}}</td>
                         <td class="align-middle">{{supplier.phone_number}}</td>
                         <td class="align-middle">{{supplier.address}}</td>
-                        <td class="pe-3 d-flex justify-content-center align-items-center">
-                            <a href="{%url 'supplier-update' supplier.id %}" class="btn btn-sm btn-outline-secondary me-1">Update</a>
-                            <a href="{%url 'supplier-delete' supplier.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        <td class="pe-3 align-middle">
+                            <div class="d-flex align-items-center">
+                                <a href="{%url 'supplier-update' supplier.id %}" class="btn btn-sm btn-outline-secondary me-1">Update</a>
+                                <a href="{%url 'supplier-delete' supplier.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                            </div>
                         </td>
                     </tr>
                     {%endfor%}

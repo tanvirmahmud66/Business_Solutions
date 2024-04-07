@@ -90,7 +90,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
     
     def __str__(self):
         return self.model
@@ -136,7 +136,7 @@ class Inventory(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.product.model
@@ -172,7 +172,7 @@ class Purchase(models.Model):
     purchase_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['purchase_date']
+        ordering = ['-purchase_date']
 
     def save(self, *args, **kwargs):
         self.due_amount = (self.quantity*self.unit_cost) - self.paid_ammount
@@ -204,6 +204,9 @@ class Sales(models.Model):
     amount = models.IntegerField(null=True,blank=True)
     product_quantity = models.BigIntegerField(null=True,blank=True)
     sales_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-sales_date']
 
     def __str__(self):
         return f"{self.id}"

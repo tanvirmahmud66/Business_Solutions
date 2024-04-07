@@ -40,7 +40,7 @@
                 <tbody class="">
                     {%for product in product_list%}
                         <tr>
-                            <td>{{product}}</td>
+                            <td class="align-middle">{{product}}</td>
                             <td>
                                 <div class="overflow-hidden d-flex justify-content-center align-items-center">
                                     {%if product.product.product.productImg %}
@@ -50,10 +50,10 @@
                                     {%endif%}
                                 </div>
                             </td>
-                            <td class="text-center">{{product.product.unit_price}}</td>
-                            <td class="text-center">{{product.quantity}}</td>
-                            <td class="text-center text-success">{{product.subtotal}}</td>
-                            <td class="text-center">
+                            <td class="text-center align-middle">{{product.product.unit_price}}</td>
+                            <td class="text-center align-middle">{{product.quantity}}</td>
+                            <td class="text-center align-middle text-success">{{product.subtotal}}</td>
+                            <td class="text-center align-middle">
                                 <a href="{%url 'invoice-remove-item' buyer.email product.id%}" class="btn btn-sm btn-danger">Remove</a>
                             </td>
                         </tr>

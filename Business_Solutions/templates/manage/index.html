@@ -2,14 +2,18 @@
 {% load static %}
 
 <!-- titile -->
-{%block link%}
-    <title>Manage Store | Amar Shop</title>
-{%endblock link%}
+{%block title%}Manage Store | Amarshop{%endblock title%}
 
+
+{%block link%}
+    <link rel="stylesheet" href="{%static 'css/inventory.css'%}">
+{%endblock link%}
 
 <!-- main body -->
 {%block main%}
 
-<h1>This is Manage Store section</h1>
+<div class="card height-100">
+    Manage Store section
+</div>
 
 {%endblock main%}
