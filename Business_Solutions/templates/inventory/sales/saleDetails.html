@@ -17,10 +17,10 @@
             </a>
             <div class="fw-bold fs-5 position-absolute top-50 start-50 translate-middle">Sale Details</div>
         </div>
-        <div class="card-body">
+        <div class="card-body overflow-scroll">
             <div class="row">
                 <div class="col-5">
-                    <div class="card">
+                    <div class="card sticky-top">
                         <div class="card-header fw-bold text-success text-center">Sale Information</div>
                         <div class="card-body p-0">
                             <table class="m-0 table table-bordered border-secondary">
@@ -91,7 +91,7 @@
                                 <th scope="col" class="text-center align-middle">Subtotal</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="">
                             {%for each in invoice_list%}
                             <tr>
                                 <td class="align-middle">{{each.product.product.model}}</td>

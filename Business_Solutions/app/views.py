@@ -284,7 +284,9 @@ class InvoiceListView(SuperuserRequiredMixin, ListView):
         product_list = ProductLineUp.objects.filter(token = self.kwargs.get('pk'), sale_confirm=False)
         context['product_list'] = product_list
         total_amount = product_list.aggregate(total_amount=Sum('subtotal'))['total_amount']
+        total_quantity = product_list.aggregate(total_quantity=Sum('quantity'))['total_quantity']
         context['total_amount'] = total_amount
+        context['total_quantity'] = total_quantity
         pk = self.kwargs.get('pk')
         print(pk)
         if pk:
@@ -351,6 +353,18 @@ class SalesPayment(SuperuserRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['email'] = self.kwargs.get('pk', None)
+        product_list = ProductLineUp.objects.filter(token = self.kwargs.get('pk'), sale_confirm=False)
+        context['product_list'] = product_list
+        total_amount = product_list.aggregate(total_amount=Sum('subtotal'))['total_amount']
+        total_quantity = product_list.aggregate(total_quantity=Sum('quantity'))['total_quantity']
+        context['total_amount'] = total_amount
+        context['total_quantity'] = total_quantity
+        pk = self.kwargs.get('pk')
+        if pk:
+            if User.objects.filter(email=pk).exists():
+                context['customer'] = User.objects.filter(email=pk).first()
+            if GeneralUser.objects.filter(email=pk).exists():
+                context['customer'] = GeneralUser.objects.filter(email=pk).first()
         return context
     
     def form_valid(self, form):
