@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'app',
+    'app.apps.AppConfig',
     'bootstrap5',
 ]
 
@@ -139,7 +139,7 @@ LOGIN_URL = 'admin-login'
 LOGOUT_REDIRECT_URL = '/login/'
 
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 
 STATICFILES_DIRS = [
@@ -159,3 +159,6 @@ PASSWORD_RESET_TEMPLATE = 'authentication/password_reset_form.html'
 PASSWORD_RESET_DONE_TEMPLATE = 'authentication/password_reset_done.html'
 PASSWORD_RESET_CONFIRM_TEMPLATE = 'authentication/password_reset_confirm.html'
 PASSWORD_RESET_COMPLETE_TEMPLATE = 'authentication/password_reset_complete.html'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
