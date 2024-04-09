@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&h8zr+=72z%l2!=k(=1&_q0=4y-g&v$$8jx3hd2d81si$03u6w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
+ALLOWED_HOSTS = ['*']
 
 
 # Email Settings
@@ -78,12 +78,12 @@ WSGI_APPLICATION = 'Business_Solutions.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # DATABASES = {
@@ -97,16 +97,16 @@ WSGI_APPLICATION = 'Business_Solutions.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'uARwQzoffgSNxcLdYZaIvkNqswhPLZjU',
-        'HOST': 'roundhouse.proxy.rlwy.net',
-        'PORT': '23075',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'uARwQzoffgSNxcLdYZaIvkNqswhPLZjU',
+#         'HOST': 'roundhouse.proxy.rlwy.net',
+#         'PORT': '23075',
+#     }
+# }
 
 
 
@@ -150,8 +150,14 @@ LOGIN_URL = 'admin-login'
 LOGOUT_REDIRECT_URL = '/login/'
 
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_ROOT = BASE_DIR / 'static/media'
 
 
@@ -159,8 +165,7 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
 
 PASSWORD_RESET_TEMPLATE = 'authentication/password_reset_form.html'
 PASSWORD_RESET_DONE_TEMPLATE = 'authentication/password_reset_done.html'
