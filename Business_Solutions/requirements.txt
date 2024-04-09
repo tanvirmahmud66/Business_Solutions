@@ -6,6 +6,7 @@ django-bootstrap-v5==1.0.11
 django-compressor==4.4
 django-multiupload==0.6.1
 gunicorn==21.2.0
+packaging==24.0
 pillow==10.2.0
 psycopg2==2.9.9
 rcssmin==1.1.1
