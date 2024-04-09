@@ -1,5 +1,5 @@
 
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&h8zr+=72z%l2!=k(=1&_q0=4y-g&v$$8jx3hd2d81si$03u6w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
 
 
 # Email Settings
@@ -78,12 +78,12 @@ WSGI_APPLICATION = 'Business_Solutions.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # DATABASES = {
@@ -96,6 +96,17 @@ DATABASES = {
 #         'PORT': '5432',  # Default port is 5432
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'uARwQzoffgSNxcLdYZaIvkNqswhPLZjU',
+        'HOST': 'roundhouse.proxy.rlwy.net',
+        'PORT': '23075',
+    }
+}
 
 
 
@@ -141,11 +152,6 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
-
 MEDIA_ROOT = BASE_DIR / 'static/media'
 
 
@@ -153,7 +159,8 @@ MEDIA_ROOT = BASE_DIR / 'static/media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+STATICFILES_DIRS = os.path.join(BASE_DIR, 'static'),
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
 PASSWORD_RESET_TEMPLATE = 'authentication/password_reset_form.html'
 PASSWORD_RESET_DONE_TEMPLATE = 'authentication/password_reset_done.html'
@@ -161,4 +168,3 @@ PASSWORD_RESET_CONFIRM_TEMPLATE = 'authentication/password_reset_confirm.html'
 PASSWORD_RESET_COMPLETE_TEMPLATE = 'authentication/password_reset_complete.html'
 
 
-CORS_ALLOW_ALL_ORIGINS = True
